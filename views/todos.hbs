@@ -4,29 +4,49 @@
 <head>
   <meta charset="utf-8" />
   <title>Todos</title>
+  <link href="output_main.css" rel="stylesheet">
+  </link>
+  {{!--
+  <script src="htmx.min.js"></script> --}}
 </head>
 
 <body>
-  <table>
-    <thead>
-      <th>
-        ID
-      </th>
-      <th>
-        Name
-      </th>
-    </thead>
-    {{#each todos}}
-    <tr>
-      <td>
-        {{this.id}}
-      </td>
-      <td>
-        {{this.name}}
-      </td>
-    </tr>
-    {{/each}}
-  </table>
+  <div class="p-2.5">
+    <button class="btn btn-success float-right">
+      Create
+    </button>
+    <table class="table table-zebra">
+      <thead>
+        <th>
+          ID
+        </th>
+        <th>
+          Name
+        </th>
+        <th>
+          Action
+        </th>
+      </thead>
+      {{#each todos}}
+      <tr>
+        <td>
+          {{this.id}}
+        </td>
+        <td>
+          {{this.name}}
+        </td>
+        <td>
+          <button class="btn btn-primary">
+            Edit
+          </button>
+          <button class="btn btn-error">
+            Delete
+          </button>
+        </td>
+      </tr>
+      {{/each}}
+    </table>
+  </div>
 </body>
 
 </html>
