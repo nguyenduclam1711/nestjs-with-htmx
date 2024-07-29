@@ -12,7 +12,7 @@ import { TodosService } from 'src/services/todos.service';
 export class TodosPageController {
   constructor(private todosService: TodosService) {}
   @Get()
-  @Render('todos')
+  @Render('todos/index')
   renderTodos() {
     return {
       todos: this.todosService.findAll(),
