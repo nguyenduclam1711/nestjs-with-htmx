@@ -6,12 +6,15 @@
   <title>Todos</title>
   <link href="output_main.css" rel="stylesheet">
   </link>
-  {{!--
-  <script src="htmx.min.js"></script> --}}
+  <script src="htmx.min.js"></script>
+  <script src="todos_page.js" defer></script>
 </head>
 
 <body>
   <div class="p-2.5">
+    <h1 class="text-center text-2xl font-bold">
+      Todo list
+    </h1>
     <button class="btn btn-success float-right">
       Create
     </button>
@@ -28,7 +31,7 @@
         </th>
       </thead>
       {{#each todos}}
-      <tr>
+      <tr id="todo_item_{{this.id}}">
         <td>
           {{this.id}}
         </td>
@@ -39,11 +42,28 @@
           <button class="btn btn-primary">
             Edit
           </button>
-          <button class="btn btn-error">
+          <button class="btn btn-error" onclick="delete_todo_{{this.id}}_modal.showModal()">
             Delete
           </button>
         </td>
       </tr>
+      {{!-- delete todo item modal --}}
+      <dialog id="delete_todo_{{this.id}}_modal" class="modal">
+        <div class="modal-box">
+          <h3 class="text-lg font-bold">Delete todo number {{this.id}}</h3>
+          <div class="modal-action">
+            <form method="dialog">
+              <button class="btn">Cancel</button>
+              <button class="btn btn-primary" hx-delete="/todos-page/{{this.id}}" hx-swap="delete"
+                hx-target="#todo_item_{{this.id}}" htmx-on="htmx:afterRequest"
+                hx-vals='{"requestType": "DELETE_TODO", "deleteId": "delete_todo_{{this.id}}_modal"}'>
+                Confirm
+              </button>
+            </form>
+          </div>
+        </div>
+      </dialog>
+      {{!-- delete todo item modal --}}
       {{/each}}
     </table>
   </div>

@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { TodosService } from 'src/services/todos.service';
 
@@ -53,6 +54,10 @@ export class TodosController {
     @Param('id')
     id: string,
   ) {
-    return this.todosService.deleteOne(Number(id));
+    try {
+      return this.todosService.deleteOne(Number(id));
+    } catch (error) {
+      throw new UnprocessableEntityException(error.message);
+    }
   }
 }

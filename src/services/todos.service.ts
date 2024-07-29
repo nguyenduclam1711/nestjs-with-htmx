@@ -9,11 +9,14 @@ type TodoWithoutId = Omit<Todo, 'id'>;
 
 @Injectable()
 export class TodosService {
-  private incrementalId = 0;
   private todos: Array<{
     id: number;
     name: string;
-  }> = [];
+  }> = Array.from(Array(10)).map((_, index) => ({
+    name: `Todo ${index + 1}`,
+    id: index + 1,
+  }));
+  private incrementalId = this.todos.length;
 
   findAll() {
     return this.todos;
@@ -56,7 +59,7 @@ export class TodosService {
   deleteOne(id: number) {
     const todoIndex = this.getTodoIndex(id);
     if (todoIndex < 0) {
-      return;
+      throw Error('The todo item does not exists');
     }
     const deleteTodo = this.todos[todoIndex];
     // filter
