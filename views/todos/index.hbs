@@ -15,9 +15,10 @@
     <h1 class="text-center text-2xl font-bold">
       Todo list
     </h1>
-    <button class="btn btn-success float-right">
+    <button class="btn btn-success float-right" onclick="create_todo_modal.showModal()">
       Create
     </button>
+    {{> createTodoModal }}
     <table class="table table-zebra">
       <thead>
         <th>
@@ -30,27 +31,11 @@
           Action
         </th>
       </thead>
-      {{#each todos}}
-      <tr id="todo_item_{{this.id}}">
-        <td>
-          {{this.id}}
-        </td>
-        <td>
-          {{this.name}}
-        </td>
-        <td>
-          <button class="btn btn-primary">
-            Edit
-          </button>
-          <button class="btn btn-error" onclick="delete_todo_{{this.id}}_modal.showModal()">
-            Delete
-          </button>
-        </td>
-      </tr>
-      {{!-- delete todo item modal --}}
-      {{> deleteTodoModal }}
-      {{!-- delete todo item modal --}}
-      {{/each}}
+      <tbody id='todo_table_body'>
+        {{#each todos}}
+        {{> todoItemRow this }}
+        {{/each}}
+      </tbody>
     </table>
   </div>
 </body>

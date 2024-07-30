@@ -1,11 +1,15 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
   Param,
+  Post,
   Render,
+  Res,
   UnprocessableEntityException,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { TodosService } from 'src/services/todos.service';
 
 @Controller('/todos-page')
@@ -17,6 +21,19 @@ export class TodosPageController {
     return {
       todos: this.todosService.findAll(),
     };
+  }
+
+  @Post()
+  createTodo(
+    @Body()
+    body: {
+      name: string;
+    },
+    @Res()
+    res: Response,
+  ) {
+    const createdTodo = this.todosService.createOne(body);
+    return res.render('todos/todo_item_row', createdTodo);
   }
 
   @Delete(':id')

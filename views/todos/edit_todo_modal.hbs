@@ -1,0 +1,35 @@
+<dialog id='edit_todo_{{id}}_modal' class='modal'>
+  <div class='modal-box'>
+    <h3 class='text-lg font-bold'>Create todo</h3>
+    <form id='edit_todo_{{id}}_form'>
+      <div class='mt-4'>
+        <label for='id'>
+          ID:
+        </label>
+        <input
+          id='id'
+          class='input input-sm'
+          name='id'
+          disabled
+          value='{{id}}'
+        />
+      </div>
+      <div class='mt-4'>
+        <label for='name'>
+          Name:
+        </label>
+        <input id='name' class='input input-sm' name='name' value='{{name}}' />
+      </div>
+    </form>
+    <div class='modal-action'>
+      <form method='dialog'>
+        <button class='btn' onclick='edit_todo_{{id}}_form.reset()'>
+          Cancel
+        </button>
+        <button class='btn btn-primary'>
+          Confirm
+        </button>
+      </form>
+    </div>
+  </div>
+</dialog>

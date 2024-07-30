@@ -1,0 +1,18 @@
+<tr id="todo_item_{{id}}">
+  <td>
+    {{id}}
+  </td>
+  <td>
+    {{name}}
+  </td>
+  <td>
+    <button class="btn btn-primary" onclick="edit_todo_{{id}}_modal.showModal()">
+      Edit
+    </button>
+    <button class="btn btn-error" onclick="delete_todo_{{id}}_modal.showModal()">
+      Delete
+    </button>
+  </td>
+</tr>
+{{> deleteTodoModal }}
+{{> editTodoModal }}

@@ -1,16 +1,16 @@
-<dialog id='delete_todo_{{this.id}}_modal' class='modal'>
+<dialog id='delete_todo_{{id}}_modal' class='modal'>
   <div class='modal-box'>
-    <h3 class='text-lg font-bold'>Delete todo number {{this.id}}</h3>
+    <h3 class='text-lg font-bold'>Delete todo id {{id}}</h3>
     <div class='modal-action'>
       <form method='dialog'>
         <button class='btn'>Cancel</button>
         <button
           class='btn btn-primary'
-          hx-delete='/todos-page/{{this.id}}'
+          hx-delete='/todos-page/{{id}}'
           hx-swap='delete'
-          hx-target='#todo_item_{{this.id}}'
+          hx-target='#todo_item_{{id}}'
           htmx-on='htmx:afterRequest'
-          hx-vals='{"requestType": "DELETE_TODO", "deleteId": "delete_todo_{{this.id}}_modal"}'
+          hx-vals='{"requestType": "DELETE_TODO", "deleteId": "delete_todo_{{id}}_modal"}'
         >
           Confirm
         </button>

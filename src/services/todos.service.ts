@@ -19,7 +19,7 @@ export class TodosService {
   private incrementalId = this.todos.length;
 
   findAll() {
-    return this.todos;
+    return this.todos.sort((a, b) => b.id - a.id);
   }
 
   private getTodoIndex(id: number) {
