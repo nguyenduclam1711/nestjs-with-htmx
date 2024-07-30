@@ -6,6 +6,8 @@
       hx-post='/todos-page'
       hx-target='#todo_table_body'
       hx-swap='afterbegin'
+      hx-on='htmx:afterRequest'
+      hx-vals='{"requestType": "CREATE_TODO", "formId": "create_todo_form"}'
     >
       <div class='mt-4'>
         <label for='name'>
@@ -13,16 +15,18 @@
         </label>
         <input id='name' class='input input-sm' name='name' />
       </div>
-      <button class='btn btn-primary mt-4' type='submit'>
-        Confirm
-      </button>
-    </form>
-    <div class='modal-action'>
-      <form method='dialog'>
-        <button class='btn' onclick='create_todo_form.reset()'>
+      <div class='modal-action'>
+        <button class='btn' type='reset' onclick='create_todo_modal.close()'>
           Cancel
         </button>
-      </form>
-    </div>
+        <button
+          class='btn btn-primary'
+          type='submit'
+          onclick='create_todo_modal.close()'
+        >
+          Confirm
+        </button>
+      </div>
+    </form>
   </div>
 </dialog>
