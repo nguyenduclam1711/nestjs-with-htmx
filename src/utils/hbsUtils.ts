@@ -1,7 +1,7 @@
 import * as hbs from 'hbs';
 import { join } from 'path';
 import { VIEWS_PATH } from 'src/constants/paths';
-const fs = require('fs');
+import * as fs from 'fs';
 
 export const HbsUtils = {
   registerPartial(partialName: string, filePath: string) {
@@ -11,6 +11,9 @@ export const HbsUtils = {
     } catch (error) {
       console.log('registerPartial error', error);
     }
+  },
+  registerCommonPartials() {
+    this.registerPartial('commonHeader', join(VIEWS_PATH, 'common_header.hbs'));
   },
   registerTodoPartials() {
     this.registerPartial(
@@ -31,6 +34,7 @@ export const HbsUtils = {
     );
   },
   initPartials() {
+    this.registerCommonPartials();
     this.registerTodoPartials();
   },
 };
