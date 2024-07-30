@@ -11,6 +11,7 @@ document.body.addEventListener('htmx:afterRequest', function (evt) {
         }
         break;
       }
+      case 'EDIT_TODO':
       case 'CREATE_TODO': {
         const formId = parameters.get('formId');
         const form = document.getElementById(formId);

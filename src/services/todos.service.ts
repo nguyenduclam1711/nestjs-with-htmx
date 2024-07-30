@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 
-type Todo = {
+export type Todo = {
   id: string;
   name: string;
 };
 
-type TodoWithoutId = Omit<Todo, 'id'>;
+export type TodoWithoutId = Omit<Todo, 'id'>;
 
 @Injectable()
 export class TodosService {
@@ -37,7 +37,7 @@ export class TodosService {
   updateOne(id: number, payload: TodoWithoutId) {
     const todoIndex = this.getTodoIndex(id);
     if (todoIndex < 0) {
-      return;
+      throw Error('The todo item does not exists');
     }
     this.todos[todoIndex] = {
       ...this.todos[todoIndex],

@@ -1,7 +1,13 @@
 <dialog id='edit_todo_{{id}}_modal' class='modal'>
   <div class='modal-box'>
-    <h3 class='text-lg font-bold'>Create todo</h3>
-    <form id='edit_todo_{{id}}_form'>
+    <h3 class='text-lg font-bold'>Edit todo {{id}}</h3>
+    <form
+      id='edit_todo_{{id}}_form'
+      hx-put='/todos-page/{{id}}'
+      hx-vals='{"requestType": "EDIT_TODO", "formId": "edit_todo_{{id}}_form"}'
+      hx-target='#todo_item_{{id}}'
+      hx-swap='outerHTML'
+    >
       <div class='mt-4'>
         <label for='id'>
           ID:
@@ -10,8 +16,8 @@
           id='id'
           class='input input-sm'
           name='id'
-          disabled
           value='{{id}}'
+          disabled
         />
       </div>
       <div class='mt-4'>
@@ -20,16 +26,22 @@
         </label>
         <input id='name' class='input input-sm' name='name' value='{{name}}' />
       </div>
-    </form>
-    <div class='modal-action'>
-      <form method='dialog'>
-        <button class='btn' onclick='edit_todo_{{id}}_form.reset()'>
+      <div class='modal-action'>
+        <button
+          class='btn'
+          type='reset'
+          onclick='edit_todo_{{id}}_modal.close()'
+        >
           Cancel
         </button>
-        <button class='btn btn-primary'>
+        <button
+          class='btn btn-primary'
+          type='submit'
+          onclick='edit_todo_{{id}}_modal.close()'
+        >
           Confirm
         </button>
-      </form>
-    </div>
+      </div>
+    </form>
   </div>
 </dialog>
