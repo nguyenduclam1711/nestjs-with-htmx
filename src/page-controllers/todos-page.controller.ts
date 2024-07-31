@@ -10,16 +10,19 @@ import {
   Render,
   Res,
   UnprocessableEntityException,
+  UseFilters,
   UsePipes,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { join } from 'path';
+import { PageExceptionFilter } from 'src/exception-filters/page-exception.filter';
 import { PageValidationPipe } from 'src/pipes/page-validation.pipe';
 import { TodoWithoutId, TodoWithoutIdSchema } from 'src/schemas/todo';
 import { TodosService } from 'src/services/todos.service';
 
 @Controller('/todos-page')
 export class TodosPageController {
-  constructor(private todosService: TodosService) { }
+  constructor(private todosService: TodosService) {}
 
   @Get()
   @Render('todos/index')
@@ -30,6 +33,18 @@ export class TodosPageController {
   }
 
   @Post()
+  @UseFilters(
+    new PageExceptionFilter(
+      join('todos', 'todo_form_data_inputs.hbs'),
+      (req) => {
+        const body = req.body;
+        return {
+          email: body.email,
+          name: body.name,
+        };
+      },
+    ),
+  )
   @UsePipes(new PageValidationPipe(TodoWithoutIdSchema))
   createTodo(
     @Body()

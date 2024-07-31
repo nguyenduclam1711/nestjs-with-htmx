@@ -2,7 +2,8 @@ import { z } from 'zod';
 
 export const TodoSchema = z.object({
   id: z.number().int(),
-  name: z.string().nonempty(),
+  name: z.string().trim().min(1),
+  email: z.string().email(),
 });
 
 export const TodoWithoutIdSchema = TodoSchema.omit({

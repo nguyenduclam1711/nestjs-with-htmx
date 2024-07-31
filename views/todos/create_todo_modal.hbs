@@ -1,29 +1,17 @@
 <dialog id='create_todo_modal' class='modal'>
   <div class='modal-box'>
     <h3 class='text-lg font-bold'>Create todo</h3>
-    <form
-      id='create_todo_form'
-      hx-post='/todos-page'
-      hx-target='#todo_table_body'
-      hx-swap='afterbegin'
+    <form id='create_todo_form' hx-post='/todos-page' hx-target='#todo_table_body' hx-swap='afterbegin'
       hx-on='htmx:afterRequest'
-      hx-vals='{"requestType": "CREATE_TODO", "formId": "create_todo_form"}'
-    >
-      <div class='mt-4'>
-        <label for='name'>
-          Name:
-        </label>
-        <input id='name' class='input input-sm' name='name' />
+      hx-vals='{"requestType": "CREATE_TODO", "formId": "create_todo_form", "targetErrorNode": "create_todo_form_inputs", "dialogId": "create_todo_modal"}'>
+      <div id='create_todo_form_inputs'>
+        {{> todoFormDataInputs }}
       </div>
       <div class='modal-action'>
         <button class='btn' type='reset' onclick='create_todo_modal.close()'>
           Cancel
         </button>
-        <button
-          class='btn btn-primary'
-          type='submit'
-          onclick='create_todo_modal.close()'
-        >
+        <button class='btn btn-primary' type='submit'>
           Confirm
         </button>
       </div>

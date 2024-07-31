@@ -6,6 +6,7 @@ export class TodosService {
   private todos: Array<Todo> = Array.from(Array(10)).map((_, index) => ({
     name: `Todo ${index + 1}`,
     id: index + 1,
+    email: `email${index + 1}@gmail.com`,
   }));
   private incrementalId = this.todos.length;
 

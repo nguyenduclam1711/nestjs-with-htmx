@@ -4,6 +4,15 @@ import { VIEWS_PATH } from 'src/constants/paths';
 import * as fs from 'fs';
 
 export const HbsUtils = {
+  compile(filePath: string, context?: any) {
+    try {
+      const input = fs.readFileSync(filePath, 'utf8');
+      const template = hbs.handlebars.compile(input);
+      return template(context);
+    } catch (error) {
+      console.log('hbs compile error', error);
+    }
+  },
   registerPartial(partialName: string, filePath: string) {
     try {
       const partialTemplate = fs.readFileSync(filePath, 'utf8');
@@ -35,6 +44,10 @@ export const HbsUtils = {
     this.registerPartial(
       'todoItemRow',
       join(VIEWS_PATH, 'todos', 'todo_item_row.hbs'),
+    );
+    this.registerPartial(
+      'todoFormDataInputs',
+      join(VIEWS_PATH, 'todos', 'todo_form_data_inputs.hbs'),
     );
   },
   initPartials() {
