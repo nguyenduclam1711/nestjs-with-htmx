@@ -14,6 +14,10 @@ export const HbsUtils = {
   },
   registerCommonPartials() {
     this.registerPartial('commonHeader', join(VIEWS_PATH, 'common_header.hbs'));
+    this.registerPartial(
+      'commonErrorAlert',
+      join(VIEWS_PATH, 'common_error_alert.hbs'),
+    );
   },
   registerTodoPartials() {
     this.registerPartial(
