@@ -56,7 +56,7 @@ export class TodosController {
   ) {
     try {
       return this.todosService.deleteOne(Number(id));
-    } catch (error) {
+    } catch (error: any) {
       throw new UnprocessableEntityException(error.message);
     }
   }

@@ -1,18 +1,9 @@
 import { Injectable } from '@nestjs/common';
-
-export type Todo = {
-  id: string;
-  name: string;
-};
-
-export type TodoWithoutId = Omit<Todo, 'id'>;
+import { Todo, TodoWithoutId } from 'src/schemas/todo';
 
 @Injectable()
 export class TodosService {
-  private todos: Array<{
-    id: number;
-    name: string;
-  }> = Array.from(Array(10)).map((_, index) => ({
+  private todos: Array<Todo> = Array.from(Array(10)).map((_, index) => ({
     name: `Todo ${index + 1}`,
     id: index + 1,
   }));
