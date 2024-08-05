@@ -32,6 +32,10 @@ export const HbsUtils = {
       'todoItemRow',
       join(VIEWS_PATH, 'todos', 'todo_item_row.hbs'),
     );
+    this.registerPartial(
+      'todoTableItems',
+      join(VIEWS_PATH, 'todos', 'todo_table_items.hbs'),
+    );
   },
   initPartials() {
     this.registerCommonPartials();

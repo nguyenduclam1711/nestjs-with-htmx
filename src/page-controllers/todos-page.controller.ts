@@ -16,9 +16,16 @@ import { TodosService, TodoWithoutId } from 'src/services/todos.service';
 @Controller('/todos-page')
 export class TodosPageController {
   constructor(private todosService: TodosService) {}
+
   @Get()
   @Render('todos/index')
   renderTodos() {
+    return {};
+  }
+
+  @Get('/todo-items')
+  @Render('todos/todo_table_items')
+  getTodoTableItems() {
     return {
       todos: this.todosService.findAll(),
     };
@@ -53,9 +60,10 @@ export class TodosPageController {
   }
 
   @Delete(':id')
-  deleteTodo(@Param('id') id: string) {
+  deleteTodo(@Param('id') id: string, @Res() res: Response) {
     try {
-      return this.todosService.deleteOne(Number(id));
+      res.setHeader('HX-Trigger', 'get-todo-items-event');
+      res.json(this.todosService.deleteOne(Number(id)));
     } catch (error) {
       throw new UnprocessableEntityException(error.message);
     }

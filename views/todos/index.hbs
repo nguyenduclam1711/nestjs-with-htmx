@@ -1,21 +1,20 @@
-<!DOCTYPE html>
 <html>
 
 <head>
   {{> commonHeader }}
-  <script src="todos_page/index.js" defer></script>
+  <script src='todos_page/index.js' defer></script>
 </head>
 
 <body>
-  <div class="p-2.5">
-    <h1 class="text-center text-2xl font-bold">
+  <div class='p-2.5'>
+    <h1 class='text-center text-2xl font-bold'>
       Todo list
     </h1>
-    <button class="btn btn-success float-right" onclick="create_todo_modal.showModal()">
+    <button class='btn btn-success float-right' onclick='create_todo_modal.showModal()'>
       Create
     </button>
-    {{> createTodoModal }}
-    <table class="table table-zebra">
+    <table class='table table-zebra' hx-get='/todos-page/todo-items' hx-target='#todo_table_body'
+      hx-trigger='get-todo-items-event from:body, load' hx-swap='innerHTML'>
       <thead>
         <th>
           ID
@@ -28,9 +27,6 @@
         </th>
       </thead>
       <tbody id='todo_table_body'>
-        {{#each todos}}
-        {{> todoItemRow this }}
-        {{/each}}
       </tbody>
     </table>
   </div>
