@@ -21,20 +21,16 @@ export const HbsUtils = {
       join(VIEWS_PATH, 'todos', 'delete_todo_modal.hbs'),
     );
     this.registerPartial(
-      'createTodoModal',
-      join(VIEWS_PATH, 'todos', 'create_todo_modal.hbs'),
-    );
-    this.registerPartial(
-      'editTodoModal',
-      join(VIEWS_PATH, 'todos', 'edit_todo_modal.hbs'),
-    );
-    this.registerPartial(
       'todoItemRow',
       join(VIEWS_PATH, 'todos', 'todo_item_row.hbs'),
     );
     this.registerPartial(
       'todoTableItems',
       join(VIEWS_PATH, 'todos', 'todo_table_items.hbs'),
+    );
+    this.registerPartial(
+      'createOrEdittodoModal',
+      join(VIEWS_PATH, 'todos', 'create_or_edit_todo_modal.hbs'),
     );
   },
   initPartials() {

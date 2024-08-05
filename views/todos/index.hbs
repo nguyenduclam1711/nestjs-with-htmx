@@ -10,14 +10,18 @@
     <h1 class='text-center text-2xl font-bold'>
       Todo list
     </h1>
-    <button class='btn btn-success float-right' onclick='create_todo_modal.showModal()'>
+    <button class='btn btn-success float-right' hx-get='/todos-page/todo-inputs' hx-target='#todo_modal_form_inputs'>
       Create
     </button>
+    {{> createOrEdittodoModal }}
     <table class='table table-zebra' hx-get='/todos-page/todo-items' hx-target='#todo_table_body'
-      hx-trigger='get-todo-items-event from:body, load' hx-swap='innerHTML'>
+      hx-trigger='getTodoItemsEvent from:body, load' hx-swap='innerHTML'>
       <thead>
         <th>
           ID
+        </th>
+        <th>
+          Email
         </th>
         <th>
           Name
