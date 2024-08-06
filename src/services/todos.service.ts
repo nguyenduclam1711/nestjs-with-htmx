@@ -10,8 +10,23 @@ export class TodosService {
   }));
   private incrementalId = this.todos.length;
 
-  findAll() {
-    return this.todos.sort((a, b) => b.id - a.id);
+  findAll(params?: Partial<TodoWithoutId>) {
+    return this.todos
+      .filter((todo) => {
+        if (!params) {
+          return true;
+        }
+        const { email, name } = params;
+        let condition = true;
+        if (email) {
+          condition = condition && todo.email.includes(email);
+        }
+        if (name) {
+          condition = condition && todo.name.includes(name);
+        }
+        return condition;
+      })
+      .sort((a, b) => b.id - a.id);
   }
 
   private getTodoIndex(id: number) {

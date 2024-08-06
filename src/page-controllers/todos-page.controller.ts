@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   Param,
   ParseIntPipe,
   Post,
@@ -31,9 +32,24 @@ export class TodosPageController {
 
   @Get('/todo-items')
   @Render('todos/todo_table_items')
-  getTodoTableItems() {
+  getTodoTableItems(
+    @Headers('HX-Current-URL')
+    hxCurrentUrl?: string,
+  ) {
+    const params: Partial<TodoWithoutId> = {};
+    if (hxCurrentUrl) {
+      const url = new URL(hxCurrentUrl);
+      const email = url.searchParams.get('email');
+      if (email) {
+        params.email = email;
+      }
+      const name = url.searchParams.get('name');
+      if (name) {
+        params.name = name;
+      }
+    }
     return {
-      todos: this.todosService.findAll(),
+      todos: this.todosService.findAll(params),
     };
   }
 

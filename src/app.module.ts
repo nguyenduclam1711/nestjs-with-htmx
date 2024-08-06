@@ -7,4 +7,4 @@ import { TodosPageController } from './page-controllers/todos-page.controller';
   controllers: [TodosPageController],
   providers: [TodosService],
 })
-export class AppModule { }
+export class AppModule {}
