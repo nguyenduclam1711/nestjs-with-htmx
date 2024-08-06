@@ -1,4 +1,4 @@
-document.body.addEventListener('getTodoInputsSuccessfullyEvent', function(e) {
+document.body.addEventListener('getTodoInputsSuccessfullyEvent', function (e) {
   const form = document.getElementById('create_or_edit_todo_modal_form');
   if (form && e.detail) {
     form.removeAttribute('hx-post');
@@ -22,7 +22,7 @@ document.body.addEventListener('getTodoInputsSuccessfullyEvent', function(e) {
 
 document.body.addEventListener(
   'createOrUpdateTodoSuccessfullyEvent',
-  function() {
+  function () {
     const modal = document.getElementById('create_or_edit_todo_modal');
     if (modal) {
       modal.close();

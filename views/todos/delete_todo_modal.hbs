@@ -3,10 +3,18 @@
     <h3 class='text-lg font-bold'>Delete todo id {{id}}</h3>
     <div class='modal-action'>
       <form method='dialog'>
-        <button class='btn'>Cancel</button>
-        <button class='btn btn-primary' hx-delete='/todos-page/{{id}}'>
-          Confirm
-        </button>
+        <div class='flex gap-2 items-center'>
+          <button class='btn'>Cancel</button>
+          <button
+            class='btn btn-primary loading-btn'
+            hx-delete='/todos-page/{{id}}'
+            hx-swap='none'
+          >
+            <span class='loading loading-spinner'>
+            </span>
+            Confirm
+          </button>
+        </div>
       </form>
     </div>
   </div>

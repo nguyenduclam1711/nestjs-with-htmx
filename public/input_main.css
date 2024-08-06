@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.loading-btn {
+  gap: 0;
+
+  .loading {
+    opacity: 0;
+    transition: all 0.2s;
+    width: 0;
+  }
+
+  &.htmx-request {
+    gap: 0.5rem;
+
+    .loading {
+      opacity: 1;
+      width: 1.5rem;
+    }
+  }
+}

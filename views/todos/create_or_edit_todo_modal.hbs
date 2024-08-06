@@ -2,14 +2,28 @@
   <div class='modal-box'>
     <h3 class='text-lg font-bold' id='create_or_edit_todo_modal_title'>
     </h3>
-    <form id='create_or_edit_todo_modal_form'>
+    <form
+      id='create_or_edit_todo_modal_form'
+      hx-swap='none'
+      hx-indicator='#create_or_edit_todo_modal_confirm_button'
+    >
       <div id='todo_modal_form_inputs'>
       </div>
       <div class='modal-action'>
-        <button class='btn' type='reset' onclick='create_or_edit_todo_modal.close()'>
+        <button
+          class='btn'
+          type='reset'
+          onclick='create_or_edit_todo_modal.close()'
+        >
           Cancel
         </button>
-        <button class='btn btn-primary' type='submit'>
+        <button
+          class='btn btn-primary loading-btn'
+          type='submit'
+          id='create_or_edit_todo_modal_confirm_button'
+        >
+          <span class='loading loading-spinner'>
+          </span>
           Confirm
         </button>
       </div>

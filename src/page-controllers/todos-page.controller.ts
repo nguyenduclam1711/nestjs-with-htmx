@@ -16,11 +16,7 @@ import {
 import { Response } from 'express';
 import { PageExceptionFilter } from 'src/exception-filters/page-exception.filter';
 import { PageValidationPipe } from 'src/pipes/page-validation.pipe';
-import {
-  TodoSchema,
-  TodoWithoutId,
-  TodoWithoutIdSchema,
-} from 'src/schemas/todo';
+import { TodoWithoutId, TodoWithoutIdSchema } from 'src/schemas/todo';
 import { TodosService } from 'src/services/todos.service';
 
 @Controller('/todos-page')

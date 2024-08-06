@@ -8,13 +8,18 @@
   <td>
     {{name}}
   </td>
-  <td class='w-52'>
-    <button class='btn btn-primary' hx-get='/todos-page/todo-inputs/{{id}}' hx-target='#todo_modal_form_inputs'>
-      Edit
-    </button>
-    <button class='btn btn-error' onclick='delete_todo_{{id}}_modal.showModal()'>
-      Delete
-    </button>
-    {{> deleteTodoModal }}
+  <td>
+    <div class='flex items-center gap-2'>
+      <button class='btn btn-primary loading-btn' hx-get='/todos-page/todo-inputs/{{id}}'
+        hx-target='#todo_modal_form_inputs'>
+        <span class='loading loading-spinner'>
+        </span>
+        Edit
+      </button>
+      <button class='btn btn-error' onclick='delete_todo_{{id}}_modal.showModal()'>
+        Delete
+      </button>
+      {{> deleteTodoModal }}
+    </div>
   </td>
 </tr>

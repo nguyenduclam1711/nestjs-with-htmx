@@ -10,9 +10,12 @@
     <h1 class='text-center text-2xl font-bold'>
       Todo list
     </h1>
-    <button class='btn btn-success float-right' hx-get='/todos-page/todo-inputs' hx-target='#todo_modal_form_inputs'>
-      Create
-    </button>
+    <div class='flex justify-end'>
+      <button class='btn btn-success loading-btn' hx-get='/todos-page/todo-inputs' hx-target='#todo_modal_form_inputs'>
+        <span class='loading loading-spinner'></span>
+        Create
+      </button>
+    </div>
     {{> createOrEdittodoModal }}
     <table class='table table-zebra' hx-get='/todos-page/todo-items' hx-target='#todo_table_body'
       hx-trigger='getTodoItemsEvent from:body, load' hx-swap='innerHTML'>
@@ -26,7 +29,7 @@
         <th>
           Name
         </th>
-        <th>
+        <th class='w-52'>
           Action
         </th>
       </thead>
