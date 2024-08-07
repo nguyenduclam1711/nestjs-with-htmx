@@ -10,14 +10,17 @@ export class TodosService {
   }));
   private incrementalId = this.todos.length;
 
-  findAll(params?: Partial<TodoWithoutId>) {
+  findAll(params?: Partial<Todo>) {
     return this.todos
       .filter((todo) => {
         if (!params) {
           return true;
         }
-        const { email, name } = params;
+        const { email, name, id } = params;
         let condition = true;
+        if (id) {
+          condition = condition && todo.id === id;
+        }
         if (email) {
           condition = condition && todo.email.includes(email);
         }

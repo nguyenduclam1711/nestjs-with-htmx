@@ -3,11 +3,11 @@ import {
   Controller,
   Delete,
   Get,
-  Headers,
   Param,
   ParseIntPipe,
   Post,
   Put,
+  Query,
   Render,
   Res,
   UnprocessableEntityException,
@@ -17,7 +17,7 @@ import {
 import { Response } from 'express';
 import { PageExceptionFilter } from 'src/exception-filters/page-exception.filter';
 import { PageValidationPipe } from 'src/pipes/page-validation.pipe';
-import { TodoWithoutId, TodoWithoutIdSchema } from 'src/schemas/todo';
+import { Todo, TodoWithoutId, TodoWithoutIdSchema } from 'src/schemas/todo';
 import { TodosService } from 'src/services/todos.service';
 
 @Controller('/todos-page')
@@ -26,27 +26,37 @@ export class TodosPageController {
 
   @Get()
   @Render('todos/index')
-  renderTodos() {
-    return {};
+  renderTodos(
+    @Query('id')
+    id: string,
+    @Query('email')
+    email: string,
+    @Query('name')
+    name: string,
+  ) {
+    return {
+      idParam: id,
+      emailParam: email,
+      nameParam: name,
+    };
   }
 
   @Get('/todo-items')
   @Render('todos/todo_table_items')
   getTodoTableItems(
-    @Headers('HX-Current-URL')
-    hxCurrentUrl?: string,
+    @Query('id')
+    id: string,
+    @Query('email')
+    email: string,
+    @Query('name')
+    name: string,
   ) {
-    const params: Partial<TodoWithoutId> = {};
-    if (hxCurrentUrl) {
-      const url = new URL(hxCurrentUrl);
-      const email = url.searchParams.get('email');
-      if (email) {
-        params.email = email;
-      }
-      const name = url.searchParams.get('name');
-      if (name) {
-        params.name = name;
-      }
+    const params: Partial<Todo> = {
+      email,
+      name,
+    };
+    if (id) {
+      params.id = Number(id);
     }
     return {
       todos: this.todosService.findAll(params),
