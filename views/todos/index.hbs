@@ -17,7 +17,7 @@
       </button>
     </div>
     <form id='todo_filter_form' class='m-0 flex gap-2 items-center justify-center' hx-get='/todos-page/todo-items'
-      hx-target='#todo_table_body' hx-trigger='getTodoItemsEvent from:body, load' hx-swap='innerHTML'>
+      hx-target='#todo_table_body' hx-trigger='getTodoItemsEvent from:body, load, submit' hx-swap='innerHTML'>
       <label class="input input-bordered input-sm flex items-center gap-2">
         ID
         <input name='id' type="text" class="grow" value='{{idParam}}' />

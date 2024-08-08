@@ -12,10 +12,12 @@ import {
   Res,
   UnprocessableEntityException,
   UseFilters,
+  UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { PageExceptionFilter } from 'src/exception-filters/page-exception.filter';
+import { PagePushUrlWithParamsInterceptor } from 'src/interceptors/page-push-curr-url-with-params.interceptor';
 import { PageValidationPipe } from 'src/pipes/page-validation.pipe';
 import { Todo, TodoWithoutId, TodoWithoutIdSchema } from 'src/schemas/todo';
 import { TodosService } from 'src/services/todos.service';
@@ -42,6 +44,7 @@ export class TodosPageController {
   }
 
   @Get('/todo-items')
+  @UseInterceptors(PagePushUrlWithParamsInterceptor)
   @Render('todos/todo_table_items')
   getTodoTableItems(
     @Query('id')
