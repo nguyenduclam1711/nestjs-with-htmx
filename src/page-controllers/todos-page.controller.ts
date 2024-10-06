@@ -46,7 +46,7 @@ export class TodosPageController {
   @Get('/todo-items')
   @UseInterceptors(PagePushUrlWithParamsInterceptor)
   @Render('todos/todo_table_items')
-  getTodoTableItems(
+  async getTodoTableItems(
     @Query('id')
     id: string,
     @Query('email')
@@ -61,8 +61,9 @@ export class TodosPageController {
     if (id) {
       params.id = Number(id);
     }
+    const todos = await this.todosService.findAll(params);
     return {
-      todos: this.todosService.findAll(params),
+      todos,
     };
   }
 
@@ -83,7 +84,7 @@ export class TodosPageController {
   }
 
   @Get('/todo-inputs/:id')
-  getUpdateTodoInputs(
+  async getUpdateTodoInputs(
     @Param('id', ParseIntPipe)
     id: number,
     @Res()
@@ -97,7 +98,7 @@ export class TodosPageController {
       },
     };
     res.setHeader('HX-Trigger', JSON.stringify(hxTriggerVal));
-    const todoItem = this.todosService.findOne(id);
+    const todoItem = await this.todosService.findOne(id);
     res.render('todos/todo_form_data_inputs', todoItem);
   }
 
@@ -125,13 +126,13 @@ export class TodosPageController {
     }),
   )
   @UsePipes(new PageValidationPipe(TodoWithoutIdSchema))
-  createTodo(
+  async createTodo(
     @Body()
     body: TodoWithoutId,
     @Res()
     res: Response,
   ) {
-    const newTodo = this.todosService.createOne(body);
+    const newTodo = await this.todosService.createOne(body);
     res.setHeader(
       'HX-Trigger',
       'getTodoItemsEvent, createOrUpdateTodoSuccessfullyEvent',
@@ -166,7 +167,7 @@ export class TodosPageController {
     }),
   )
   @UsePipes(new PageValidationPipe(TodoWithoutIdSchema))
-  editTodo(
+  async editTodo(
     @Body()
     body: TodoWithoutId,
     @Param('id', ParseIntPipe)
@@ -174,7 +175,7 @@ export class TodosPageController {
     @Res()
     res: Response,
   ) {
-    const editedTodo = this.todosService.updateOne(id, body);
+    const editedTodo = await this.todosService.updateOne(id, body);
     res.setHeader(
       'HX-Trigger',
       'getTodoItemsEvent, createOrUpdateTodoSuccessfullyEvent',
@@ -184,10 +185,11 @@ export class TodosPageController {
   }
 
   @Delete(':id')
-  deleteTodo(@Param('id') id: string, @Res() res: Response) {
+  async deleteTodo(@Param('id') id: string, @Res() res: Response) {
     try {
       res.setHeader('HX-Trigger', 'getTodoItemsEvent');
-      res.json(this.todosService.deleteOne(Number(id)));
+      const deleted = await this.todosService.deleteOne(Number(id));
+      res.json(deleted);
     } catch (error: any) {
       throw new UnprocessableEntityException(error.message);
     }

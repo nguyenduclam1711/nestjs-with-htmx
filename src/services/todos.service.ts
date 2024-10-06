@@ -1,84 +1,75 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { Knex } from 'knex';
+import { DATABASES } from 'src/constants/databases';
+import { MODULES } from 'src/constants/modules';
 import { Todo, TodoWithoutId } from 'src/schemas/todo';
 
 @Injectable()
 export class TodosService {
-  private todos: Array<Todo> = Array.from(Array(10)).map((_, index) => ({
-    name: `Todo ${index + 1}`,
-    id: index + 1,
-    email: `email${index + 1}@gmail.com`,
-  }));
-  private incrementalId = this.todos.length;
+  constructor(
+    @Inject(MODULES.KNEX_CONNECTION)
+    private readonly knex: Knex,
+  ) {}
 
-  findAll(params?: Partial<Todo>) {
-    return this.todos
-      .filter((todo) => {
+  async findTodos() {
+    return this.knex(DATABASES.TODOS).select('*').orderBy('id', 'desc');
+  }
+
+  async createTodo(payload: TodoWithoutId) {
+    return this.knex(DATABASES.TODOS).insert(payload);
+  }
+
+  findAll(params?: Partial<Todo>): Promise<Todo[]> {
+    return this.knex(DATABASES.TODOS)
+      .select('*')
+      .where((builder) => {
         if (!params) {
-          return true;
+          return;
         }
-        const { email, name, id } = params;
-        let condition = true;
-        if (id) {
-          condition = condition && todo.id === id;
+        if (params.id) {
+          builder.where('id', params.id);
         }
-        if (email) {
-          condition = condition && todo.email.includes(email);
+        if (params.name) {
+          builder.whereILike('name', `%${params.name}%`);
         }
-        if (name) {
-          condition = condition && todo.name.includes(name);
+        if (params.email) {
+          builder.whereILike('email', `%${params.email}%`);
         }
-        return condition;
       })
-      .sort((a, b) => b.id - a.id);
+      .orderBy('id', 'desc');
   }
 
-  private getTodoIndex(id: number) {
-    return this.todos.findIndex((todo) => todo.id === id);
+  async findOne(id: number): Promise<undefined | Todo> {
+    const todos = await this.knex(DATABASES.TODOS).where('id', id);
+    return todos[0];
   }
 
-  findOne(id: number) {
-    const todoIndex = this.getTodoIndex(id);
-    if (todoIndex < 0) {
-      return;
-    }
-    return this.todos[todoIndex];
+  async updateOne(
+    id: number,
+    payload: TodoWithoutId,
+  ): Promise<undefined | Todo> {
+    const update = await this.knex(DATABASES.TODOS)
+      .update({
+        name: payload.name,
+        email: payload.email,
+      })
+      .where('id', id)
+      .returning(['*']);
+    return update[0];
   }
 
-  updateOne(id: number, payload: TodoWithoutId) {
-    const todoIndex = this.getTodoIndex(id);
-    if (todoIndex < 0) {
-      throw Error('The todo item does not exists');
-    }
-    this.todos[todoIndex] = {
-      ...this.todos[todoIndex],
-      ...payload,
-    };
-    return this.todos[todoIndex];
+  async createOne(payload: TodoWithoutId): Promise<Todo> {
+    const create = await this.knex(DATABASES.TODOS)
+      .insert(payload)
+      .returning(['*']);
+    return create[0];
   }
 
-  createOne(payload: TodoWithoutId) {
-    this.incrementalId++;
-    const newTodo = {
-      ...payload,
-      id: this.incrementalId,
-    };
-    this.todos.push(newTodo);
-    return newTodo;
-  }
-
-  deleteOne(id: number) {
-    const todoIndex = this.getTodoIndex(id);
-    if (todoIndex < 0) {
-      throw Error('The todo item does not exists');
-    }
-    const deleteTodo = this.todos[todoIndex];
-    // filter
-    for (let i = todoIndex; i < this.todos.length - 1; i++) {
-      const temp = this.todos[i];
-      this.todos[i] = this.todos[i + 1];
-      this.todos[i + 1] = temp;
-    }
-    this.todos.pop();
-    return deleteTodo;
+  async deleteOne(id: number): Promise<undefined | Todo> {
+    const deleteQuery = await this.knex(DATABASES.TODOS)
+      .where('id', id)
+      .delete()
+      .returning(['*']);
+    return deleteQuery[0];
   }
 }
