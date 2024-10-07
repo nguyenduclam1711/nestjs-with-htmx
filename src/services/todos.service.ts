@@ -11,14 +11,6 @@ export class TodosService {
     private readonly knex: Knex,
   ) {}
 
-  async findTodos() {
-    return this.knex(DATABASES.TODOS).select('*').orderBy('id', 'desc');
-  }
-
-  async createTodo(payload: TodoWithoutId) {
-    return this.knex(DATABASES.TODOS).insert(payload);
-  }
-
   findAll(params?: Partial<Todo>): Promise<Todo[]> {
     return this.knex(DATABASES.TODOS)
       .select('*')
