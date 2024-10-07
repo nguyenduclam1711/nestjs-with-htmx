@@ -3,11 +3,11 @@ import { TodosService } from './services/todos.service';
 import { TodosPageController } from './page-controllers/todos-page.controller';
 import { ConfigModule } from '@nestjs/config';
 import { KnexModule } from './modules/knex.module';
-import { TestController } from './page-controllers/test.controller';
 import { InitDatabase } from './services/init-database.service';
 import { UserCredentialsService } from './services/user-credentials.service';
 import { UsersService } from './services/users.service';
 import { AuthService } from './services/auth.service';
+import { TestController } from './controllers/test.controller';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }), KnexModule],
