@@ -24,6 +24,6 @@ import { MODULES } from 'src/constants/modules';
       inject: [ConfigService],
     },
   ],
-  exports: ['KNEX_CONNECTION'],
+  exports: [MODULES.KNEX_CONNECTION],
 })
 export class KnexModule {}
