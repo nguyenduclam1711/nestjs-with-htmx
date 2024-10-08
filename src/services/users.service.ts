@@ -21,4 +21,9 @@ export class UsersService {
       .returning(['*']);
     return query[0];
   }
+
+  async findOne(user: Partial<User>): Promise<User | undefined> {
+    const usersQuery = await this.knex(DATABASES.USERS).select('*').where(user);
+    return usersQuery[0];
+  }
 }
