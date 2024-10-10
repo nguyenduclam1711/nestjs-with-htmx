@@ -16,6 +16,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { Public } from 'src/decorators/public.decorator';
 import { PageExceptionFilter } from 'src/exception-filters/page-exception.filter';
 import { PagePushUrlWithParamsInterceptor } from 'src/interceptors/page-push-curr-url-with-params.interceptor';
 import { PageValidationPipe } from 'src/pipes/page-validation.pipe';
@@ -26,6 +27,7 @@ import { TodosService } from 'src/services/todos.service';
 export class TodosPageController {
   constructor(private todosService: TodosService) {}
 
+  @Public()
   @Get()
   @Render('todos/index')
   renderTodos(

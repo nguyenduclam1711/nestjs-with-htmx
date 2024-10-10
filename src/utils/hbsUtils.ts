@@ -39,9 +39,16 @@ export const HbsUtils = {
       join(VIEWS_PATH, 'register', 'register_form_data_inputs.hbs'),
     );
   },
+  registerLoginPartials() {
+    this.registerPartial(
+      'loginFormDataInputs',
+      join(VIEWS_PATH, 'login', 'login_form_data_inputs.hbs'),
+    );
+  },
   initPartials() {
     this.registerCommonPartials();
     this.registerTodoPartials();
     this.registerRegisterPartials();
+    this.registerLoginPartials();
   },
 };

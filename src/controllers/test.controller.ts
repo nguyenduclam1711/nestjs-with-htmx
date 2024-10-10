@@ -68,23 +68,6 @@ export class TestController {
     return this.todosService.findAll();
   }
 
-  @Public()
-  @Post('/login')
-  async login(
-    @Body()
-    body: {
-      email: string;
-      password: string;
-    },
-  ) {
-    try {
-      const response = await this.authService.login(body.email, body.password);
-      return response;
-    } catch (error: any) {
-      throw new UnprocessableEntityException(error.message);
-    }
-  }
-
   @Get('/profile')
   getProfile(@Request() req: any) {
     return req.user;

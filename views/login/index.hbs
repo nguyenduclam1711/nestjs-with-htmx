@@ -2,6 +2,7 @@
 
 <head>
   {{> commonHeader }}
+  <script src="login_page/index.js" type="module"></script>
 </head>
 
 <body>
@@ -11,15 +12,10 @@
         <h1 class="card-title">
           Login
         </h1>
-        <form class="flex gap-4 flex-col" hx-post="/login">
-          <label class="input input-bordered flex items-center gap-2">
-            Email
-            <input name="email" type="text" class="grow" autocomplete="email" />
-          </label>
-          <label class="input input-bordered flex items-center gap-2">
-            Password
-            <input name="password" type="password" class="grow" autocomplete="current-password" />
-          </label>
+        <form class="flex gap-4 flex-col" hx-post="/login" hx-target="#login_form_data_inputs">
+          <div id="login_form_data_inputs">
+            {{> loginFormDataInputs}}
+          </div>
           <a class="link link-primary" href="/register">
             Register
           </a>

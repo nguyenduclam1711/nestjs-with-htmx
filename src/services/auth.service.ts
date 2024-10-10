@@ -7,6 +7,7 @@ import { UsersService } from './users.service';
 import { UserCredentialsService } from './user-credentials.service';
 import { hash, compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { ErrorUtils } from 'src/utils/errorUtils';
 
 @Injectable()
 export class AuthService {
@@ -44,17 +45,26 @@ export class AuthService {
     });
     const errorMessage = "Can't login with this information";
     if (!user) {
-      throw new Error(errorMessage);
+      return ErrorUtils.throwPageException({
+        Exception: UnprocessableEntityException,
+        message: errorMessage,
+      });
     }
     const userCredential = await this.userCredentialsService.findOneByUserId(
       user.id,
     );
     if (!userCredential) {
-      throw new Error(errorMessage);
+      return ErrorUtils.throwPageException({
+        Exception: UnprocessableEntityException,
+        message: errorMessage,
+      });
     }
     const match = await compare(password, userCredential.password);
     if (!match) {
-      throw new Error(errorMessage);
+      return ErrorUtils.throwPageException({
+        Exception: UnprocessableEntityException,
+        message: errorMessage,
+      });
     }
     const userPayload = {
       id: user.id,

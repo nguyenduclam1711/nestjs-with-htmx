@@ -44,6 +44,7 @@ export class PageExceptionFilter implements ExceptionFilter {
     }
     res.render(this.templateFilePath, {
       ...templateCtx,
+      errorMessage: exception.message,
       error: pageFormError,
     });
   }
