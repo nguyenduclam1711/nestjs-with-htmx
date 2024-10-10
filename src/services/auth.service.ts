@@ -1,4 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserCredentialsService } from './user-credentials.service';
 import { hash, compare } from 'bcrypt';
@@ -26,10 +30,12 @@ export class AuthService {
       name,
       email,
     });
-    await this.userCredentialsService.createOne({
-      user,
-      password: hashedPassword,
-    });
+    if (user) {
+      await this.userCredentialsService.createOne({
+        user,
+        password: hashedPassword,
+      });
+    }
   }
 
   async login(email: string, password: string) {

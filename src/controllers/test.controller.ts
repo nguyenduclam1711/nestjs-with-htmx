@@ -29,6 +29,7 @@ export class TestController {
     private todosService: TodosService,
   ) {}
 
+  @Public()
   @Delete('/recreate-tables')
   async deleteTables() {
     try {

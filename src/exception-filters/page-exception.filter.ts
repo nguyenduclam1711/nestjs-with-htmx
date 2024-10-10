@@ -5,8 +5,7 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { ErrorUtils } from 'src/utils/errorUtils';
-import { ZodError } from 'zod';
+import { PageExceptionCause } from 'src/schemas/error';
 
 @Catch(HttpException)
 export class PageExceptionFilter implements ExceptionFilter {
@@ -33,9 +32,7 @@ export class PageExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const res = ctx.getResponse<Response>();
     const req = ctx.getRequest<Request>();
-    const transformedErr = ErrorUtils.transformZodErrForPageErrorCtx(
-      exception.cause as ZodError,
-    );
+    const { pageFormError } = exception.cause as PageExceptionCause;
     let templateCtx: Record<string, any> = {};
     if (typeof this.getTemplateCtx === 'function') {
       templateCtx = this.getTemplateCtx(req);
@@ -47,7 +44,7 @@ export class PageExceptionFilter implements ExceptionFilter {
     }
     res.render(this.templateFilePath, {
       ...templateCtx,
-      error: transformedErr,
+      error: pageFormError,
     });
   }
 }

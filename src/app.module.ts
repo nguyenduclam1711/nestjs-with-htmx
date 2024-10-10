@@ -9,8 +9,11 @@ import { UsersService } from './services/users.service';
 import { AuthService } from './services/auth.service';
 import { TestController } from './controllers/test.controller';
 import { JwtModule } from '@nestjs/jwt';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { JwtGuard } from './guards/jwt.guard';
+import { LoginPageController } from './page-controllers/login-page.controller';
+import { UnauthorizedFilter } from './exception-filters/unauthorized-exception.filter';
+import { RegisterPageController } from './page-controllers/register-page.controller';
 
 @Module({
   imports: [
@@ -30,7 +33,12 @@ import { JwtGuard } from './guards/jwt.guard';
       },
     }),
   ],
-  controllers: [TodosPageController, TestController],
+  controllers: [
+    TodosPageController,
+    TestController,
+    LoginPageController,
+    RegisterPageController,
+  ],
   providers: [
     TodosService,
     InitDatabase,
@@ -40,6 +48,10 @@ import { JwtGuard } from './guards/jwt.guard';
     {
       provide: APP_GUARD,
       useClass: JwtGuard,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: UnauthorizedFilter,
     },
   ],
 })

@@ -1,8 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { Knex } from 'knex';
 import { DATABASES } from 'src/constants/databases';
 import { MODULES } from 'src/constants/modules';
 import { User } from 'src/schemas/users';
+import { ErrorUtils } from 'src/utils/errorUtils';
 
 @Injectable()
 export class UsersService {
@@ -11,15 +17,35 @@ export class UsersService {
     private readonly knex: Knex,
   ) {}
 
-  async createOne(args: { name: string; email: string }): Promise<User> {
+  async createOne(args: {
+    name: string;
+    email: string;
+  }): Promise<User | undefined> {
     const { name, email } = args;
-    const query = await this.knex(DATABASES.USERS)
-      .insert({
-        name,
-        email,
-      })
-      .returning(['*']);
-    return query[0];
+    try {
+      const query = await this.knex(DATABASES.USERS)
+        .insert({
+          name,
+          email,
+        })
+        .returning(['*']);
+      return query[0];
+    } catch (error: any) {
+      if (error.code === '23505') {
+        ErrorUtils.throwPageException({
+          Exception: ConflictException,
+          message: error.detail,
+          pageFormError: {
+            email: 'Email has already existed',
+          },
+        });
+      } else {
+        ErrorUtils.throwPageException({
+          Exception: UnprocessableEntityException,
+          message: error.detail,
+        });
+      }
+    }
   }
 
   async findOne(user: Partial<User>): Promise<User | undefined> {

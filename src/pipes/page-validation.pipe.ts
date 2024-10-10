@@ -4,11 +4,12 @@ import {
   BadRequestException,
   ArgumentMetadata,
 } from '@nestjs/common';
+import { ErrorUtils } from 'src/utils/errorUtils';
 import { ZodError, ZodSchema } from 'zod';
 
 @Injectable()
 export class PageValidationPipe implements PipeTransform {
-  constructor(private schema: ZodSchema) { }
+  constructor(private schema: ZodSchema) {}
 
   transform(value: any, metadata: ArgumentMetadata) {
     if (metadata.type === 'body') {
@@ -16,8 +17,13 @@ export class PageValidationPipe implements PipeTransform {
         const parsedValue = this.schema.parse(value);
         return parsedValue;
       } catch (error: any) {
-        throw new BadRequestException('Validation error', {
-          cause: error as ZodError,
+        const pageFormError = ErrorUtils.transformZodErrForPageErrorCtx(
+          error as ZodError,
+        );
+        ErrorUtils.throwPageException({
+          Exception: BadRequestException,
+          message: 'Validation error',
+          pageFormError,
         });
       }
     } else {

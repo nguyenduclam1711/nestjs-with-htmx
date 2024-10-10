@@ -33,8 +33,15 @@ export const HbsUtils = {
       join(VIEWS_PATH, 'todos', 'create_or_edit_todo_modal.hbs'),
     );
   },
+  registerRegisterPartials() {
+    this.registerPartial(
+      'registerFormDataInputs',
+      join(VIEWS_PATH, 'register', 'register_form_data_inputs.hbs'),
+    );
+  },
   initPartials() {
     this.registerCommonPartials();
     this.registerTodoPartials();
+    this.registerRegisterPartials();
   },
 };
