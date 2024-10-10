@@ -14,7 +14,7 @@ export class UserCredentialsService {
 
   async createOne(args: { user: User; password: string }) {
     const { user, password } = args;
-    return this.knex(DATABASES.USER_CREDENTIALS).insert({
+    await this.knex(DATABASES.USER_CREDENTIALS).insert({
       user_id: user.id,
       password,
     });

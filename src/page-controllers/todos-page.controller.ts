@@ -16,7 +16,6 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { Public } from 'src/decorators/public.decorator';
 import { PageExceptionFilter } from 'src/exception-filters/page-exception.filter';
 import { PagePushUrlWithParamsInterceptor } from 'src/interceptors/page-push-curr-url-with-params.interceptor';
 import { PageValidationPipe } from 'src/pipes/page-validation.pipe';
@@ -27,7 +26,6 @@ import { TodosService } from 'src/services/todos.service';
 export class TodosPageController {
   constructor(private todosService: TodosService) {}
 
-  @Public()
   @Get()
   @Render('todos/index')
   renderTodos(
@@ -45,7 +43,6 @@ export class TodosPageController {
     };
   }
 
-  @Public()
   @Get('/todo-items')
   @UseInterceptors(PagePushUrlWithParamsInterceptor)
   @Render('todos/todo_table_items')
@@ -70,7 +67,6 @@ export class TodosPageController {
     };
   }
 
-  @Public()
   @Get('/todo-inputs')
   getCreateTodoInputs(
     @Res()
@@ -87,7 +83,6 @@ export class TodosPageController {
     res.render('todos/todo_form_data_inputs');
   }
 
-  @Public()
   @Get('/todo-inputs/:id')
   async getUpdateTodoInputs(
     @Param('id', ParseIntPipe)
@@ -107,7 +102,6 @@ export class TodosPageController {
     res.render('todos/todo_form_data_inputs', todoItem);
   }
 
-  @Public()
   @Post()
   @UseFilters(
     new PageExceptionFilter({
@@ -147,7 +141,6 @@ export class TodosPageController {
     res.json(newTodo);
   }
 
-  @Public()
   @Put(':id')
   @UseFilters(
     new PageExceptionFilter({
@@ -191,7 +184,6 @@ export class TodosPageController {
     res.json(editedTodo);
   }
 
-  @Public()
   @Delete(':id')
   async deleteTodo(@Param('id') id: string, @Res() res: Response) {
     try {
