@@ -13,36 +13,39 @@ export const HbsUtils = {
     }
   },
   registerCommonPartials() {
-    this.registerPartial('commonHeader', join(VIEWS_PATH, 'common_header.hbs'));
+    this.registerPartial(
+      'commonHeader',
+      join(VIEWS_PATH, 'commons', 'common-header.hbs'),
+    );
   },
   registerTodoPartials() {
     this.registerPartial(
       'deleteTodoModal',
-      join(VIEWS_PATH, 'todos', 'delete_todo_modal.hbs'),
+      join(VIEWS_PATH, 'pages', 'todos', 'delete-todo-modal.hbs'),
     );
     this.registerPartial(
       'todoItemRow',
-      join(VIEWS_PATH, 'todos', 'todo_item_row.hbs'),
+      join(VIEWS_PATH, 'pages', 'todos', 'todo-item-row.hbs'),
     );
     this.registerPartial(
       'todoTableItems',
-      join(VIEWS_PATH, 'todos', 'todo_table_items.hbs'),
+      join(VIEWS_PATH, 'pages', 'todos', 'todo-table-items.hbs'),
     );
     this.registerPartial(
       'createOrEdittodoModal',
-      join(VIEWS_PATH, 'todos', 'create_or_edit_todo_modal.hbs'),
+      join(VIEWS_PATH, 'pages', 'todos', 'create-or-edit-todo-modal.hbs'),
     );
   },
   registerRegisterPartials() {
     this.registerPartial(
       'registerFormDataInputs',
-      join(VIEWS_PATH, 'register', 'register_form_data_inputs.hbs'),
+      join(VIEWS_PATH, 'pages', 'register', 'register-form-data-inputs.hbs'),
     );
   },
   registerLoginPartials() {
     this.registerPartial(
       'loginFormDataInputs',
-      join(VIEWS_PATH, 'login', 'login_form_data_inputs.hbs'),
+      join(VIEWS_PATH, 'pages', 'login', 'login-form-data-inputs.hbs'),
     );
   },
   initPartials() {

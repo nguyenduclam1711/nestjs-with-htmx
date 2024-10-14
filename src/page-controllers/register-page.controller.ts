@@ -2,13 +2,14 @@ import {
   Body,
   Controller,
   Get,
-  Header,
   Inject,
   Post,
   Render,
+  Response,
   UseFilters,
   UsePipes,
 } from '@nestjs/common';
+import { Response as ExpressResponse } from 'express';
 import { Public } from 'src/decorators/public.decorator';
 import { PageExceptionFilter } from 'src/exception-filters/page-exception.filter';
 import { PageValidationPipe } from 'src/pipes/page-validation.pipe';
@@ -24,7 +25,7 @@ export class RegisterPageController {
 
   @Public()
   @Get()
-  @Render('register/index')
+  @Render('pages/register/index')
   renderRegisterPage() {
     return {};
   }
@@ -33,7 +34,7 @@ export class RegisterPageController {
   @Post()
   @UseFilters(
     new PageExceptionFilter({
-      templateFilePath: 'register/register_form_data_inputs',
+      templateFilePath: 'pages/register/register-form-data-inputs',
       getTemplateCtx: (req) => {
         const body = req.body as RegisterBodyType;
         return {
@@ -45,11 +46,15 @@ export class RegisterPageController {
     }),
   )
   @UsePipes(new PageValidationPipe(ResgiterBodySchema))
-  @Header('Hx-Trigger', 'registerSuccessfullyEvent')
   async register(
     @Body()
     body: RegisterBodyType,
+    @Response()
+    res: ExpressResponse,
   ) {
     await this.authService.register(body);
+    res.setHeader('Hx-Trigger', 'registerSuccessfullyEvent');
+    res.setHeader('Hx-Reswap', 'none');
+    res.sendStatus(200);
   }
 }

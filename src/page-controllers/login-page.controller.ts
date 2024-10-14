@@ -25,7 +25,7 @@ export class LoginPageController {
 
   @Public()
   @Get()
-  @Render('login/index')
+  @Render('pages/login/index')
   renderLoginPage() {
     return {};
   }
@@ -34,7 +34,7 @@ export class LoginPageController {
   @Post()
   @UseFilters(
     new PageExceptionFilter({
-      templateFilePath: 'login/login_form_data_inputs',
+      templateFilePath: 'pages/login/login-form-data-inputs',
       getTemplateCtx(req) {
         const body = req.body as LoginBodyType;
         return {

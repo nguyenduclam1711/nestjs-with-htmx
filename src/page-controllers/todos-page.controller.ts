@@ -29,7 +29,7 @@ export class TodosPageController {
 
   @Public()
   @Get()
-  @Render('todos/index')
+  @Render('pages/todos/index')
   renderTodos(
     @Query('id')
     id: string,
@@ -47,7 +47,7 @@ export class TodosPageController {
 
   @Get('/todo-items')
   @UseInterceptors(PagePushUrlWithParamsInterceptor)
-  @Render('todos/todo_table_items')
+  @Render('pages/todos/todo-table-items')
   async getTodoTableItems(
     @Query('id')
     id: string,
@@ -82,7 +82,7 @@ export class TodosPageController {
       },
     };
     res.setHeader('HX-Trigger', JSON.stringify(hxTriggerVal));
-    res.render('todos/todo_form_data_inputs');
+    res.render('pages/todos/todo-form-data-inputs');
   }
 
   @Get('/todo-inputs/:id')
@@ -101,13 +101,13 @@ export class TodosPageController {
     };
     res.setHeader('HX-Trigger', JSON.stringify(hxTriggerVal));
     const todoItem = await this.todosService.findOne(id);
-    res.render('todos/todo_form_data_inputs', todoItem);
+    res.render('pages/todos/todo-form-data-inputs', todoItem);
   }
 
   @Post()
   @UseFilters(
     new PageExceptionFilter({
-      templateFilePath: 'todos/todo_form_data_inputs',
+      templateFilePath: 'pages/todos/todo-form-data-inputs',
       getTemplateCtx: (req) => {
         const body = req.body;
         return {
@@ -118,7 +118,7 @@ export class TodosPageController {
       headers: [
         {
           key: 'HX-Retarget',
-          value: '#todo_modal_form_inputs',
+          value: '#todo-modal-form-inputs',
         },
         {
           key: 'HX-Reswap',
@@ -146,7 +146,7 @@ export class TodosPageController {
   @Put(':id')
   @UseFilters(
     new PageExceptionFilter({
-      templateFilePath: 'todos/todo_form_data_inputs',
+      templateFilePath: 'pages/todos/todo-form-data-inputs',
       getTemplateCtx: (req) => {
         const body = req.body;
         const id = req.params.id;
@@ -159,7 +159,7 @@ export class TodosPageController {
       headers: [
         {
           key: 'HX-Retarget',
-          value: '#todo_modal_form_inputs',
+          value: '#todo-modal-form-inputs',
         },
         {
           key: 'HX-Reswap',
