@@ -5,21 +5,31 @@ import {
   HttpException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { FC } from 'react';
 import { PageExceptionCause } from 'src/schemas/error';
+import { renderToString } from 'react-dom/server';
 
 @Catch(HttpException)
 export class PageExceptionFilter implements ExceptionFilter {
   private templateFilePath: string;
   private getTemplateCtx?: (req: Request) => Record<string, any>;
   private headers?: Array<{ key: string; value: any }>;
+  private Component: FC<any>;
 
   constructor(params: {
-    templateFilePath: string;
+    Component?: FC;
+    templateFilePath?: string;
     getTemplateCtx?: (req: Request) => Record<string, any>;
     headers?: Array<{ key: string; value: any }>;
   }) {
-    const { templateFilePath, getTemplateCtx, headers } = params;
+    const {
+      templateFilePath = '',
+      getTemplateCtx,
+      headers,
+      Component = () => <div></div>,
+    } = params;
     this.templateFilePath = templateFilePath;
+    this.Component = Component;
     if (getTemplateCtx) {
       this.getTemplateCtx = getTemplateCtx;
     }
@@ -42,10 +52,16 @@ export class PageExceptionFilter implements ExceptionFilter {
         res.setHeader(header.key, header.value);
       });
     }
-    res.render(this.templateFilePath, {
-      ...templateCtx,
-      errorMessage: exception.message,
-      error: pageFormError,
-    });
+    const Component = this.Component;
+    const htmlString = renderToString(
+      <Component
+        {...{
+          ...templateCtx,
+          errorMessage: exception.message,
+          error: pageFormError,
+        }}
+      />,
+    );
+    res.send(htmlString);
   }
 }

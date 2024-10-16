@@ -3,7 +3,12 @@ import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as compression from 'compression';
 import { HbsUtils } from './utils/hbsUtils';
-import { PUBLIC_PATH, VIEWS_PATH } from './constants/paths';
+import {
+  LAYOUTS_PATH,
+  PARTIALS_PATH,
+  PUBLIC_PATH,
+  VIEWS_PATH,
+} from './constants/paths';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -15,6 +20,11 @@ async function bootstrap() {
   app.useStaticAssets(PUBLIC_PATH);
   app.setBaseViewsDir(VIEWS_PATH);
   app.setViewEngine('hbs');
+  // configure Handlebars
+  app.set('view options', {
+    layoutsDir: LAYOUTS_PATH,
+    partialsDir: PARTIALS_PATH,
+  });
   HbsUtils.initPartials();
 
   await app.listen(3000);

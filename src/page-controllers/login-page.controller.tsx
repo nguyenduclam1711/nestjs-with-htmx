@@ -4,7 +4,6 @@ import {
   Get,
   Inject,
   Post,
-  Render,
   Response,
   UseFilters,
   UsePipes,
@@ -15,26 +14,43 @@ import { LoginBodySchema, LoginBodyType } from 'src/schemas/login';
 import { AuthService } from 'src/services/auth.service';
 import { Response as ExpressResponse } from 'express';
 import { PageExceptionFilter } from 'src/exception-filters/page-exception.filter';
+import { RenderingService } from 'src/services/rendering.service';
+import PageWrapper from 'src/views/commons/page-wrapper';
+import LoginPage from 'src/views/pages/login';
+import LoginFormItems from 'src/views/pages/login/login-form-items';
 
 @Controller('/login')
 export class LoginPageController {
   constructor(
     @Inject(AuthService)
     private authService: AuthService,
+    @Inject(RenderingService)
+    private renderingService: RenderingService,
   ) {}
 
   @Public()
   @Get()
-  @Render('pages/login/index')
   renderLoginPage() {
-    return {};
+    return this.renderingService.render(
+      <PageWrapper
+        title="Login"
+        scripts={[
+          {
+            src: 'login_page/index.js',
+            type: 'module',
+          },
+        ]}
+      >
+        <LoginPage />
+      </PageWrapper>,
+    );
   }
 
   @Public()
   @Post()
   @UseFilters(
     new PageExceptionFilter({
-      templateFilePath: 'pages/login/login-form-data-inputs',
+      Component: LoginFormItems,
       getTemplateCtx(req) {
         const body = req.body as LoginBodyType;
         return {

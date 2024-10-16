@@ -48,7 +48,17 @@ export const HbsUtils = {
       join(VIEWS_PATH, 'pages', 'login', 'login-form-data-inputs.hbs'),
     );
   },
+  registerLayouts() {
+    this.registerPartial(
+      'adminLayout',
+      join(VIEWS_PATH, 'layouts', 'admin-layout', 'index.hbs'),
+    );
+  },
   initPartials() {
+    // layout partials
+    this.registerLayouts();
+
+    // partials
     this.registerCommonPartials();
     this.registerTodoPartials();
     this.registerRegisterPartials();

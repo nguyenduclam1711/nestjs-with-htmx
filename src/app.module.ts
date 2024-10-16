@@ -13,6 +13,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtGuard } from './guards/jwt.guard';
 import { LoginPageController } from './page-controllers/login-page.controller';
 import { RegisterPageController } from './page-controllers/register-page.controller';
+import { RenderingService } from './services/rendering.service';
+import { TestPageController } from './page-controllers/test-page.controller';
 
 @Module({
   imports: [
@@ -37,6 +39,7 @@ import { RegisterPageController } from './page-controllers/register-page.control
     TestController,
     LoginPageController,
     RegisterPageController,
+    TestPageController,
   ],
   providers: [
     TodosService,
@@ -48,6 +51,7 @@ import { RegisterPageController } from './page-controllers/register-page.control
       provide: APP_GUARD,
       useClass: JwtGuard,
     },
+    RenderingService,
   ],
 })
 export class AppModule {}
