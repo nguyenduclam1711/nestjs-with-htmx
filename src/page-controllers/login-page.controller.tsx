@@ -15,7 +15,6 @@ import { AuthService } from 'src/services/auth.service';
 import { Response as ExpressResponse } from 'express';
 import { PageExceptionFilter } from 'src/exception-filters/page-exception.filter';
 import { RenderingService } from 'src/services/rendering.service';
-import PageWrapper from 'src/views/commons/page-wrapper';
 import LoginPage from 'src/views/pages/login';
 import LoginFormItems from 'src/views/pages/login/login-form-items';
 
@@ -31,19 +30,7 @@ export class LoginPageController {
   @Public()
   @Get()
   renderLoginPage() {
-    return this.renderingService.render(
-      <PageWrapper
-        title="Login"
-        scripts={[
-          {
-            src: 'login_page/index.js',
-            type: 'module',
-          },
-        ]}
-      >
-        <LoginPage />
-      </PageWrapper>,
-    );
+    return this.renderingService.render(<LoginPage />);
   }
 
   @Public()

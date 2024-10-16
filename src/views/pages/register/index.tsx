@@ -1,15 +1,15 @@
-import Button from 'src/views/components/button';
-import LoginFormItems from './login-form-items';
 import PageWrapper from 'src/views/commons/page-wrapper';
+import Button from 'src/views/components/button';
+import RegisterFormItems from './register-form-items';
 
-const LoginPage = () => {
-  const formItemsId = 'login-form-items';
+const RegisterPage = () => {
+  const formItemsId = 'register-form-items';
   return (
     <PageWrapper
-      title="Login"
+      title="Register"
       scripts={[
         {
-          src: 'login-page/index.js',
+          src: 'register-page/index.js',
           type: 'module',
         },
       ]}
@@ -17,19 +17,21 @@ const LoginPage = () => {
       <div className="flex justify-center items-center mt-10">
         <div className="card card-bordered bg-base-100 w-96 shadow-xl">
           <div className="card-body items-center">
-            <h1 className="card-title">Login</h1>
+            <h1 className="card-title">Register</h1>
             <form
               className="flex gap-4 flex-col w-full"
-              hx-post="/login"
+              hx-post="/register"
               hx-target={`#${formItemsId}`}
             >
               <div id={formItemsId}>
-                <LoginFormItems />
+                <RegisterFormItems />
               </div>
-              <a className="link link-primary" href="/register">
-                Register
+              <a className="link link-primary" href="/login">
+                Back to login
               </a>
-              <Button type="submit">Submit</Button>
+              <Button type="submit" variant="loading">
+                Submit
+              </Button>
             </form>
           </div>
         </div>
@@ -38,4 +40,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

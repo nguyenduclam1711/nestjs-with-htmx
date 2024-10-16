@@ -4,7 +4,6 @@ import {
   Get,
   Inject,
   Post,
-  Render,
   Response,
   UseFilters,
   UsePipes,
@@ -15,26 +14,30 @@ import { PageExceptionFilter } from 'src/exception-filters/page-exception.filter
 import { PageValidationPipe } from 'src/pipes/page-validation.pipe';
 import { RegisterBodyType, ResgiterBodySchema } from 'src/schemas/register';
 import { AuthService } from 'src/services/auth.service';
+import { RenderingService } from 'src/services/rendering.service';
+import RegisterPage from 'src/views/pages/register';
+import RegisterFormItems from 'src/views/pages/register/register-form-items';
 
 @Controller('/register')
 export class RegisterPageController {
   constructor(
     @Inject(AuthService)
     private authService: AuthService,
+    @Inject(RenderingService)
+    private renderingService: RenderingService,
   ) {}
 
   @Public()
   @Get()
-  @Render('pages/register/index')
   renderRegisterPage() {
-    return {};
+    return this.renderingService.render(<RegisterPage />);
   }
 
   @Public()
   @Post()
   @UseFilters(
     new PageExceptionFilter({
-      templateFilePath: 'pages/register/register-form-data-inputs',
+      Component: RegisterFormItems,
       getTemplateCtx: (req) => {
         const body = req.body as RegisterBodyType;
         return {
