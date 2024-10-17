@@ -2,7 +2,7 @@ import { ReactNode, ScriptHTMLAttributes } from 'react';
 
 interface PageWrapperScript extends ScriptHTMLAttributes<HTMLScriptElement> {}
 
-type PageWrapperProps = {
+export type PageWrapperProps = {
   children: ReactNode;
   title?: string;
   scripts?: PageWrapperScript[];

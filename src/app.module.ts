@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { TodosService } from './services/todos.service';
-import { TodosPageController } from './page-controllers/todos-page.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { KnexModule } from './modules/knex.module';
 import { InitDatabase } from './services/init-database.service';
@@ -15,6 +13,7 @@ import { LoginPageController } from './page-controllers/login-page.controller';
 import { RegisterPageController } from './page-controllers/register-page.controller';
 import { RenderingService } from './services/rendering.service';
 import { TestPageController } from './page-controllers/test-page.controller';
+import { UsersPageController } from './page-controllers/users-page.controller';
 
 @Module({
   imports: [
@@ -35,14 +34,13 @@ import { TestPageController } from './page-controllers/test-page.controller';
     }),
   ],
   controllers: [
-    TodosPageController,
     TestController,
     LoginPageController,
     RegisterPageController,
     TestPageController,
+    UsersPageController,
   ],
   providers: [
-    TodosService,
     InitDatabase,
     UserCredentialsService,
     UsersService,

@@ -1,6 +1,8 @@
 import Button from 'src/views/components/button';
 import LoginFormItems from './login-form-items';
 import PageWrapper from 'src/views/commons/page-wrapper';
+import Card from 'src/views/components/card';
+import Link from 'src/views/components/link';
 
 const LoginPage = () => {
   const formItemsId = 'login-form-items';
@@ -15,24 +17,21 @@ const LoginPage = () => {
       ]}
     >
       <div className="flex justify-center items-center mt-10">
-        <div className="card card-bordered bg-base-100 w-96 shadow-xl">
-          <div className="card-body items-center">
-            <h1 className="card-title">Login</h1>
-            <form
-              className="flex gap-4 flex-col w-full"
-              hx-post="/login"
-              hx-target={`#${formItemsId}`}
-            >
-              <div id={formItemsId}>
-                <LoginFormItems />
-              </div>
-              <a className="link link-primary" href="/register">
-                Register
-              </a>
-              <Button type="submit">Submit</Button>
-            </form>
-          </div>
-        </div>
+        <Card title="Login" bodyClassName="items-center" className="w-96">
+          <form
+            className="flex gap-4 flex-col w-full"
+            hx-post="/login"
+            hx-target={`#${formItemsId}`}
+          >
+            <div id={formItemsId}>
+              <LoginFormItems />
+            </div>
+            <Link variant="primary" href="/register">
+              Register
+            </Link>
+            <Button type="submit">Submit</Button>
+          </form>
+        </Card>
       </div>
     </PageWrapper>
   );

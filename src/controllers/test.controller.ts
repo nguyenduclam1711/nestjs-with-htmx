@@ -14,7 +14,6 @@ import { MODULES } from 'src/constants/modules';
 import { Public } from 'src/decorators/public.decorator';
 import { AuthService } from 'src/services/auth.service';
 import { InitDatabase } from 'src/services/init-database.service';
-import { TodosService } from 'src/services/todos.service';
 
 @Controller('/test')
 export class TestController {
@@ -25,8 +24,6 @@ export class TestController {
     private readonly initDatabase: InitDatabase,
     @Inject(AuthService)
     private readonly authService: AuthService,
-    @Inject(TodosService)
-    private todosService: TodosService,
   ) {}
 
   @Public()
@@ -61,11 +58,6 @@ export class TestController {
     return {
       message: 'done',
     };
-  }
-
-  @Get('/todos')
-  async getTodos() {
-    return this.todosService.findAll();
   }
 
   @Get('/profile')
