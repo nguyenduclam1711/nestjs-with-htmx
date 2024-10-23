@@ -14,6 +14,7 @@ import { RegisterPageController } from './page-controllers/register-page.control
 import { RenderingService } from './services/rendering.service';
 import { TestPageController } from './page-controllers/test-page.controller';
 import { UsersPageController } from './page-controllers/users-page.controller';
+import { UserCredentialsPageController } from './page-controllers/user-crendetials-page.controller';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { UsersPageController } from './page-controllers/users-page.controller';
     RegisterPageController,
     TestPageController,
     UsersPageController,
+    UserCredentialsPageController,
   ],
   providers: [
     InitDatabase,

@@ -4,7 +4,7 @@ import ErrorIcon from 'src/views/icons/error-icon';
 import InfoIcon from 'src/views/icons/info-icon';
 import WarningIcon from 'src/views/icons/warning-icon';
 
-type AlertProps = {
+export type AlertProps = {
   type?: 'default' | 'info' | 'success' | 'warning' | 'error';
   children: ReactNode;
   icon?: ReactNode;

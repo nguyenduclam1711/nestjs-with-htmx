@@ -8,3 +8,10 @@ export const UserCredentialSchema = z.object({
 });
 
 export type UserCredential = z.infer<typeof UserCredentialSchema>;
+
+export type UserCredentialPageDataItem = {
+  name: string;
+  email: string;
+} & Pick<UserCredential, 'id' | 'created_at'>;
+
+export type UserCredentialPageData = UserCredentialPageDataItem[];

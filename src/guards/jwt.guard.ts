@@ -1,12 +1,9 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
+import { Request, Response } from 'express';
+import { ACCESS_TOKEN_KEY } from 'src/constants/auth';
+import { FRONTEND_ROUTES } from 'src/constants/frontend-routes';
 import { IS_PUBLIC_ENDPOINT } from 'src/decorators/public.decorator';
 
 @Injectable()
@@ -24,25 +21,27 @@ export class JwtGuard implements CanActivate {
     if (isPublicEndpoint) {
       return true;
     }
-    const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest<Request>();
+    const response = context.switchToHttp().getResponse<Response>();
     const token = this.getTokenFromHeader(request);
     if (!token) {
-      throw new UnauthorizedException();
+      response.redirect(FRONTEND_ROUTES.LOGIN);
+      return false;
+      // throw new UnauthorizedException();
     }
     try {
       const payload = await this.jwtService.verifyAsync(token);
       request['user'] = payload;
     } catch (error) {
-      throw new UnauthorizedException();
+      response.redirect(FRONTEND_ROUTES.LOGIN);
+      return false;
+      // throw new UnauthorizedException();
     }
     return true;
   }
 
   private getTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    if (type !== 'Bearer') {
-      return;
-    }
-    return token;
+    const cookies = request.cookies;
+    return cookies[ACCESS_TOKEN_KEY] ?? '';
   }
 }

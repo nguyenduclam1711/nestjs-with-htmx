@@ -24,7 +24,9 @@ const PageWrapper = (props: PageWrapperProps) => {
             <script key={`script-${index}`} {...scriptProps}></script>
           ))}
       </head>
-      <body>{children}</body>
+      <body>
+        <div className="relative">{children}</div>
+      </body>
     </html>
   );
 };
