@@ -35,7 +35,7 @@ const Dropdown = (props: DropdownProps) => {
       </div>
       <div
         tabIndex={0}
-        className="dropdown-content shadow bg-base-100 rounded-box"
+        className="dropdown-content shadow-lg bg-white rounded-box"
       >
         {content}
       </div>

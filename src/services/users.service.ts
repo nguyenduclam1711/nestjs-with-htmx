@@ -52,4 +52,8 @@ export class UsersService {
     const usersQuery = await this.knex(DATABASES.USERS).select('*').where(user);
     return usersQuery[0];
   }
+
+  async find(): Promise<User[]> {
+    return this.knex(DATABASES.USERS).select('*');
+  }
 }

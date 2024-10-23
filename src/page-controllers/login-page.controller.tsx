@@ -17,6 +17,7 @@ import { PageExceptionFilter } from 'src/exception-filters/page-exception.filter
 import { RenderingService } from 'src/services/rendering.service';
 import LoginPage from 'src/views/pages/login';
 import LoginFormItems from 'src/views/pages/login/login-form-items';
+import { AuthUtils } from 'src/utils/authUtils';
 
 @Controller('/login')
 export class LoginPageController {
@@ -56,14 +57,8 @@ export class LoginPageController {
   ) {
     const { email, password } = body;
     const response = await this.authService.login(email, password);
-    res.setHeader(
-      'Hx-Trigger',
-      JSON.stringify({
-        loginSuccessfullyEvent: {
-          accessToken: response.accessToken,
-        },
-      }),
-    );
+    res.setHeader('Set-Cookie', AuthUtils.serializeToken(response.accessToken));
+    res.setHeader('HX-Trigger', 'loginSuccessfullyEvent');
     res.setHeader('HX-Reswap', 'none');
     res.sendStatus(200);
   }

@@ -2,12 +2,11 @@ import { ReactNode } from 'react';
 import PageWrapper from '../page-wrapper';
 import AdminLayout from '../../layouts/admin';
 import { ADMIN_PAGE_SCRIPTS } from './constant';
+import { User } from 'src/schemas/users';
 
 type AdminPageWrapperProps = {
   children: ReactNode;
-  user: {
-    name: string;
-  };
+  user: User;
   pageTitle: string;
 };
 const AdminPageWrapper = (props: AdminPageWrapperProps) => {
