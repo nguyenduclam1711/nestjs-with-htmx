@@ -14,6 +14,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     | 'success'
     | 'warning'
     | 'error';
+  sizeInput?: 'xs' | 'sm' | 'md' | 'lg';
 }
 
 const mapInputColorClass: Record<NonNullable<InputProps['color']>, string> = {
@@ -35,6 +36,7 @@ const Input = (props: InputProps) => {
     suffixIcon,
     prefixIcon,
     color = 'default',
+    sizeInput = 'md',
     ...restProps
   } = props;
 
@@ -46,6 +48,9 @@ const Input = (props: InputProps) => {
     }
     if (className) {
       result += ` ${className}`;
+    }
+    if (sizeInput) {
+      result += ` input-${sizeInput} max-w-${sizeInput}`;
     }
     const colorClassName = mapInputColorClass[color];
     if (colorClassName) {

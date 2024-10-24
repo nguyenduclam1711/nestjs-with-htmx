@@ -1,0 +1,33 @@
+import Button from 'src/views/components/button';
+import {
+  USERS_SEARCH_FORM_BUTTON_ID,
+  USERS_SEARCH_FORM_ID,
+  USERS_TABLE_ID,
+} from './constants';
+import UsersSearchFormItems, {
+  UsersSearchFormItemsProps,
+} from './search-form-items';
+
+type UsersSearchFormProps = UsersSearchFormItemsProps;
+const UsersSearchForm = (props?: UsersSearchFormProps) => {
+  return (
+    <form
+      id={USERS_SEARCH_FORM_ID}
+      hx-get="/users/search"
+      hx-target={`#${USERS_TABLE_ID}`}
+      className="flex gap-4"
+    >
+      <UsersSearchFormItems {...props} />
+      <Button
+        type="submit"
+        className="mt-9"
+        size="sm"
+        id={USERS_SEARCH_FORM_BUTTON_ID}
+      >
+        Search
+      </Button>
+    </form>
+  );
+};
+
+export default UsersSearchForm;

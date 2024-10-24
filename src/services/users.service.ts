@@ -53,7 +53,17 @@ export class UsersService {
     return usersQuery[0];
   }
 
-  async find(): Promise<User[]> {
-    return this.knex(DATABASES.USERS).select('*');
+  async find(args?: { email?: string; name?: string }): Promise<User[]> {
+    const { email, name } = args ?? {};
+    return this.knex(DATABASES.USERS)
+      .select('*')
+      .where((builder) => {
+        if (email) {
+          builder.whereILike('email', `%${email}%`);
+        }
+        if (name) {
+          builder.whereILike('name', `%${name}%`);
+        }
+      });
   }
 }

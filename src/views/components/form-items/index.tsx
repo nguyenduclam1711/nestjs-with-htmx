@@ -6,7 +6,7 @@ export type FormItemsProps = {
 const FormItems = (props: FormItemsProps) => {
   const { items } = props;
   if (items.length === 0) {
-    return '';
+    return null;
   }
   return (
     <>

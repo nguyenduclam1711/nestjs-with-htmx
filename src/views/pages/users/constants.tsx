@@ -23,3 +23,7 @@ export const USERS_TABLE_COLUMNS: TableProps<User>['columns'] = [
     },
   },
 ];
+
+export const USERS_TABLE_ID = 'users-table';
+export const USERS_SEARCH_FORM_BUTTON_ID = 'users-search-form-btn';
+export const USERS_SEARCH_FORM_ID = 'users-search-form';

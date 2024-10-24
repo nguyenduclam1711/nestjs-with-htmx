@@ -11,24 +11,16 @@ import { renderToString } from 'react-dom/server';
 
 @Catch(HttpException)
 export class PageExceptionFilter implements ExceptionFilter {
-  private templateFilePath: string;
   private getTemplateCtx?: (req: Request) => Record<string, any>;
   private headers?: Array<{ key: string; value: any }>;
   private Component: FC<any>;
 
   constructor(params: {
-    Component?: FC;
-    templateFilePath?: string;
+    Component: FC;
     getTemplateCtx?: (req: Request) => Record<string, any>;
     headers?: Array<{ key: string; value: any }>;
   }) {
-    const {
-      templateFilePath = '',
-      getTemplateCtx,
-      headers,
-      Component = () => <div></div>,
-    } = params;
-    this.templateFilePath = templateFilePath;
+    const { getTemplateCtx, headers, Component } = params;
     this.Component = Component;
     if (getTemplateCtx) {
       this.getTemplateCtx = getTemplateCtx;
