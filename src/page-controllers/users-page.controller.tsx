@@ -29,16 +29,22 @@ export class UsersPageController {
     query: {
       email?: string;
       name?: string;
+      page?: string;
     },
   ) {
-    const { email, name } = query;
-    const [currentUser, data] = await Promise.all([
+    const { email, name, page = 1 } = query;
+    const [currentUser, { data, total }] = await Promise.all([
       this.usersService.findOne({
         id: req.user.id,
       }),
       this.usersService.find({
-        email,
-        name,
+        user: {
+          email,
+          name,
+        },
+        pagination: {
+          page: Number(page),
+        },
       }),
     ]);
     if (!currentUser) {
@@ -52,6 +58,8 @@ export class UsersPageController {
           name,
           email,
         }}
+        page={Number(page)}
+        total={total}
       />,
     );
   }
@@ -63,13 +71,27 @@ export class UsersPageController {
     query: {
       email?: string;
       name?: string;
+      page?: string;
     },
   ) {
-    const { email, name } = query;
-    const data = await this.usersService.find({
-      email,
-      name,
+    const { email, name, page = 1 } = query;
+    const { data, total } = await this.usersService.find({
+      user: {
+        email,
+        name,
+      },
+      pagination: {
+        page: Number(page),
+      },
     });
-    return this.renderingService.render(<UsersTable data={data} />);
+    return this.renderingService.render(
+      <UsersTable
+        data={data}
+        page={Number(page)}
+        total={total}
+        email={email}
+        name={name}
+      />,
+    );
   }
 }

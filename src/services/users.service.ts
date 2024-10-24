@@ -7,6 +7,7 @@ import {
 import { Knex } from 'knex';
 import { DATABASES } from 'src/constants/databases';
 import { MODULES } from 'src/constants/modules';
+import { DEFAULT_PAGINATION_SIZE } from 'src/constants/pagination';
 import { User } from 'src/schemas/users';
 import { ErrorUtils } from 'src/utils/errorUtils';
 
@@ -53,17 +54,36 @@ export class UsersService {
     return usersQuery[0];
   }
 
-  async find(args?: { email?: string; name?: string }): Promise<User[]> {
-    const { email, name } = args ?? {};
-    return this.knex(DATABASES.USERS)
-      .select('*')
-      .where((builder) => {
-        if (email) {
-          builder.whereILike('email', `%${email}%`);
-        }
-        if (name) {
-          builder.whereILike('name', `%${name}%`);
-        }
-      });
+  async find(args?: {
+    user?: { email?: string; name?: string };
+    pagination?: {
+      page?: number;
+      size?: number;
+    };
+  }): Promise<{ data: User[]; total: number }> {
+    const { user, pagination } = args ?? {};
+    const { email, name } = user ?? {};
+    const { page = 1, size = DEFAULT_PAGINATION_SIZE } = pagination ?? {};
+    const whereBuilderFn = (builder) => {
+      if (email) {
+        builder.whereILike('email', `%${email}%`);
+      }
+      if (name) {
+        builder.whereILike('name', `%${name}%`);
+      }
+    };
+    const [data, totalQuery] = await Promise.all([
+      this.knex(DATABASES.USERS)
+        .select('*')
+        .where(whereBuilderFn)
+        .offset(size * (page - 1))
+        .limit(size)
+        .orderBy('id', 'desc'),
+      this.knex(DATABASES.USERS).where(whereBuilderFn).count('*'),
+    ]);
+    return {
+      data,
+      total: Number(totalQuery[0].count),
+    };
   }
 }
