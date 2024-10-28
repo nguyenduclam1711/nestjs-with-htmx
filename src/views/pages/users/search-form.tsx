@@ -8,14 +8,19 @@ import UsersSearchFormItems, {
   UsersSearchFormItemsProps,
 } from './search-form-items';
 
-type UsersSearchFormProps = UsersSearchFormItemsProps;
-const UsersSearchForm = (props?: UsersSearchFormProps) => {
+type UsersSearchFormProps = {
+  page?: number;
+} & UsersSearchFormItemsProps;
+const UsersSearchForm = (props: UsersSearchFormProps) => {
+  const { page } = props;
+  const formHxVals = JSON.stringify({ page });
   return (
     <form
       id={USERS_SEARCH_FORM_ID}
       hx-get="/users/search"
       hx-target={`#${USERS_TABLE_ID}`}
       className="flex gap-4"
+      hx-vals={formHxVals}
     >
       <UsersSearchFormItems {...props} />
       <Button

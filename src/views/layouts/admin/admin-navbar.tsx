@@ -19,7 +19,7 @@ const AdminLayoutNavbar = (props: AdminLayoutNavbarProps) => {
     if (secondChar) {
       result += secondChar;
     }
-    return result;
+    return result.toUpperCase();
   };
 
   return (
