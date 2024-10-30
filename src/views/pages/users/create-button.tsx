@@ -12,7 +12,9 @@ const UsersCreateButton = () => {
       hx-get="/users/create-or-update-form-items"
       hx-swap="innerHTML"
       hx-target={`#${USERS_CREATE_FORM_ITEMS_ID}`}
-      variant="loading"
+      variant="primary"
+      loadingButton
+      size="sm"
     >
       Create
     </Button>

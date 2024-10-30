@@ -42,7 +42,10 @@ function Table<T>(props: TableProps<T>) {
                   const { dataKey, render } = column;
                   const colKey = `col-${rowIndex}-${colIndex}`;
                   if (!dataKey) {
-                    return <td key={colKey}></td>;
+                    if (!render) {
+                      return <td key={colKey}></td>;
+                    }
+                    return <td key={colKey}>{render(data, data)}</td>;
                   }
                   const renderData = get(data, dataKey);
                   if (render) {

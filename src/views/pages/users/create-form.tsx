@@ -9,7 +9,12 @@ const UsersCreateForm = () => {
       hx-swap="innerHTML"
     >
       <div id={USERS_CREATE_FORM_ITEMS_ID}></div>
-      <Button type="submit" className="mt-2 float-right" variant="loading">
+      <Button
+        type="submit"
+        className="mt-2 float-right"
+        variant="primary"
+        loadingButton
+      >
         Submit
       </Button>
     </form>

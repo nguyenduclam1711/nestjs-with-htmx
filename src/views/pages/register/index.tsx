@@ -29,7 +29,7 @@ const RegisterPage = () => {
             <Link href="/login" variant="primary">
               Go to login
             </Link>
-            <Button type="submit" variant="loading">
+            <Button type="submit" variant="primary" loadingButton>
               Submit
             </Button>
           </form>

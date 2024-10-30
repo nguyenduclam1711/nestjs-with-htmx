@@ -1,4 +1,6 @@
 import { InputHTMLAttributes, ReactNode } from 'react';
+import { MAP_INPUT_VARIANTS_TO_CLASSNAME } from './constants';
+import { MAP_BUTTON_SIZES_TO_CLASSNAME } from '../button/constants';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   variant?: 'default' | 'icon-input';
@@ -16,17 +18,6 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     | 'error';
   sizeInput?: 'xs' | 'sm' | 'md' | 'lg';
 }
-
-const mapInputColorClass: Record<NonNullable<InputProps['color']>, string> = {
-  default: '',
-  primary: 'input-primary',
-  secondary: 'input-secondary',
-  accent: 'input-accent',
-  info: 'input-info',
-  success: 'input-success',
-  warning: 'input-warning',
-  error: 'input-error',
-};
 
 const Input = (props: InputProps) => {
   const {
@@ -50,9 +41,9 @@ const Input = (props: InputProps) => {
       result += ` ${className}`;
     }
     if (sizeInput) {
-      result += ` input-${sizeInput} max-w-${sizeInput}`;
+      result += ` ${MAP_BUTTON_SIZES_TO_CLASSNAME[sizeInput]}`;
     }
-    const colorClassName = mapInputColorClass[color];
+    const colorClassName = MAP_INPUT_VARIANTS_TO_CLASSNAME[color];
     if (colorClassName) {
       result += ` ${colorClassName}`;
     }

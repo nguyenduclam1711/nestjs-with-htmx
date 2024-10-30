@@ -17,6 +17,7 @@ const PaginationButton = (props: {
       className="join-item"
       active={typeof page === 'number' && page === activePage}
       disabled={disabled}
+      size="sm"
       {...extraProps}
     >
       {page}

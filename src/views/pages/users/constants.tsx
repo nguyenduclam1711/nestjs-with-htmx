@@ -1,6 +1,7 @@
 import { SearchUserItem } from 'src/schemas/users';
 import { FormatUtils } from 'src/utils/formatUtils';
 import { PageWrapperProps } from 'src/views/commons/page-wrapper';
+import Button from 'src/views/components/button';
 import { TableProps } from 'src/views/components/table';
 
 export const USERS_TABLE_COLUMNS: TableProps<SearchUserItem>['columns'] = [
@@ -28,6 +29,16 @@ export const USERS_TABLE_COLUMNS: TableProps<SearchUserItem>['columns'] = [
     dataKey: ['created_at'],
     render: (createdAt) => {
       return FormatUtils.formatFullDate(createdAt as Date);
+    },
+  },
+  {
+    title: 'Action',
+    render: (data) => {
+      return (
+        <Button size="sm" variant="secondary">
+          Update
+        </Button>
+      );
     },
   },
 ];

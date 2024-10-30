@@ -25,7 +25,12 @@ const UsersSearchForm = (props: UsersSearchFormProps) => {
       hx-trigger={`${USERS_SEARCH_EVENT} from:body, click from:#${USERS_SEARCH_FORM_BUTTON_ID}`}
     >
       <UsersSearchFormItems {...props} />
-      <Button type="submit" className="mt-9" id={USERS_SEARCH_FORM_BUTTON_ID}>
+      <Button
+        type="submit"
+        className="mt-9"
+        id={USERS_SEARCH_FORM_BUTTON_ID}
+        size="sm"
+      >
         Search
       </Button>
     </form>
