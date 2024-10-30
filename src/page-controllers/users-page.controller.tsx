@@ -1,16 +1,28 @@
 import {
+  Body,
   Controller,
   Get,
   Inject,
+  Post,
   Query,
   Request,
+  Response,
+  UseFilters,
   UseInterceptors,
+  UsePipes,
 } from '@nestjs/common';
+import { PageExceptionFilter } from 'src/exception-filters/page-exception.filter';
 import { PagePushUrlWithParamsInterceptor } from 'src/interceptors/page-push-curr-url-with-params.interceptor';
+import { PageValidationPipe } from 'src/pipes/page-validation.pipe';
+import { CreateUserBody, CreateUserBodySchema } from 'src/schemas/users';
 import { RenderingService } from 'src/services/rendering.service';
 import { UsersService } from 'src/services/users.service';
 import UsersPage from 'src/views/pages/users';
+import UsersCreateOrUpdateFormItems from 'src/views/pages/users/create-or-update-form-items';
+import UsersSearchFormItems from 'src/views/pages/users/search-form-items';
 import UsersTable from 'src/views/pages/users/table';
+import { Response as ExpressResponse } from 'express';
+import { USERS_SEARCH_EVENT } from 'src/views/pages/users/constants';
 
 @Controller('/users')
 export class UsersPageController {
@@ -93,5 +105,40 @@ export class UsersPageController {
         name={name}
       />,
     );
+  }
+
+  @Get('/create-or-update-form-items')
+  getCreateOrUpdateFormItems() {
+    return this.renderingService.render(<UsersSearchFormItems />);
+  }
+
+  @Post()
+  @UseFilters(
+    new PageExceptionFilter({
+      Component: UsersCreateOrUpdateFormItems,
+      getTemplateCtx: (req) => {
+        const body = req.body as CreateUserBody;
+        return {
+          email: body.email,
+          name: body.name,
+        };
+      },
+    }),
+  )
+  @UsePipes(new PageValidationPipe(CreateUserBodySchema))
+  async createUser(
+    @Body()
+    body: CreateUserBody,
+    @Response()
+    res: ExpressResponse,
+  ) {
+    const { name, email } = body;
+    await this.usersService.createOne({
+      name,
+      email,
+    });
+    const hxTriggerEvents = `${USERS_SEARCH_EVENT}, closeUsersModal`;
+    res.setHeader('Hx-Trigger', hxTriggerEvents);
+    res.sendStatus(200);
   }
 }

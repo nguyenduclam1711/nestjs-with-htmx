@@ -8,7 +8,7 @@ import { Knex } from 'knex';
 import { DATABASES } from 'src/constants/databases';
 import { MODULES } from 'src/constants/modules';
 import { DEFAULT_PAGINATION_SIZE } from 'src/constants/pagination';
-import { User } from 'src/schemas/users';
+import { SearchUsers, User } from 'src/schemas/users';
 import { ErrorUtils } from 'src/utils/errorUtils';
 
 @Injectable()
@@ -60,7 +60,7 @@ export class UsersService {
       page?: number;
       size?: number;
     };
-  }): Promise<{ data: User[]; total: number }> {
+  }): Promise<{ data: SearchUsers; total: number }> {
     const { user, pagination } = args ?? {};
     const { email, name } = user ?? {};
     const { page = 1, size = DEFAULT_PAGINATION_SIZE } = pagination ?? {};
@@ -74,11 +74,22 @@ export class UsersService {
     };
     const [data, totalQuery] = await Promise.all([
       this.knex(DATABASES.USERS)
-        .select('*')
+        .select(
+          `${DATABASES.USERS}.id`,
+          `${DATABASES.USERS}.name`,
+          `${DATABASES.USERS}.email`,
+          `${DATABASES.USERS}.created_at`,
+          `${DATABASES.USER_CREDENTIALS}.user_id`,
+        )
         .where(whereBuilderFn)
         .offset(size * (page - 1))
         .limit(size)
-        .orderBy('id', 'desc'),
+        .leftJoin(
+          DATABASES.USER_CREDENTIALS,
+          `${DATABASES.USERS}.id`,
+          `${DATABASES.USER_CREDENTIALS}.user_id`,
+        )
+        .orderBy(`${DATABASES.USERS}.id`, 'desc'),
       this.knex(DATABASES.USERS).where(whereBuilderFn).count('*'),
     ]);
     return {

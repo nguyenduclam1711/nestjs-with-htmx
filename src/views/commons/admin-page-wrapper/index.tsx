@@ -9,15 +9,28 @@ type AdminPageWrapperProps = {
   user: User;
   pageTitle: string;
   extraScripts?: PageWrapperProps['scripts'];
+  activeMenuHrefs?: {
+    [href: string]: boolean;
+  };
 };
 const AdminPageWrapper = (props: AdminPageWrapperProps) => {
-  const { children, user, pageTitle, extraScripts = [] } = props;
+  const {
+    children,
+    user,
+    pageTitle,
+    extraScripts = [],
+    activeMenuHrefs,
+  } = props;
 
   const pageScripts = [...ADMIN_PAGE_SCRIPTS, ...extraScripts];
 
   return (
     <PageWrapper title={pageTitle} scripts={pageScripts}>
-      <AdminLayout user={user} pageTitle={pageTitle}>
+      <AdminLayout
+        user={user}
+        pageTitle={pageTitle}
+        activeMenuHrefs={activeMenuHrefs}
+      >
         {children}
       </AdminLayout>
     </PageWrapper>

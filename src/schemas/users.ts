@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { UserCredential } from './user-credentials';
 
 export const UserSchema = z.object({
   id: z.number().int(),
@@ -8,3 +9,13 @@ export const UserSchema = z.object({
 });
 
 export type User = z.infer<typeof UserSchema>;
+
+export const CreateUserBodySchema = UserSchema.pick({
+  name: true,
+  email: true,
+});
+
+export type CreateUserBody = z.infer<typeof CreateUserBodySchema>;
+
+export type SearchUserItem = User & Pick<UserCredential, 'user_id'>;
+export type SearchUsers = Array<SearchUserItem>;

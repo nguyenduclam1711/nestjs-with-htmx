@@ -1,15 +1,18 @@
 import FormItems, { FormItemsProps } from 'src/views/components/form-items';
 import Input, { InputProps } from 'src/views/components/input';
 
-export type UsersSearchFormItemsProps = {
-  error?: {
-    email?: string;
-    name?: string;
-  };
-  email?: string;
+type UsersCreateOrUpdateFormItemsProps = {
   name?: string;
+  email?: string;
+  error?: {
+    name?: string;
+    email?: string;
+  };
 };
-const UsersSearchFormItems = (props: UsersSearchFormItemsProps) => {
+
+const UsersCreateOrUpdateFormItems = (
+  props: UsersCreateOrUpdateFormItemsProps,
+) => {
   const { error, email, name } = props;
 
   const inputColor = (isError: boolean): InputProps['color'] => {
@@ -27,7 +30,6 @@ const UsersSearchFormItems = (props: UsersSearchFormItemsProps) => {
           name="name"
           color={inputColor(!!error?.name)}
           defaultValue={name}
-          sizeInput="sm"
         />
       ),
       error: error?.name,
@@ -39,7 +41,6 @@ const UsersSearchFormItems = (props: UsersSearchFormItemsProps) => {
           name="email"
           color={inputColor(!!error?.email)}
           defaultValue={email}
-          sizeInput="sm"
         />
       ),
       error: error?.email,
@@ -48,4 +49,4 @@ const UsersSearchFormItems = (props: UsersSearchFormItemsProps) => {
   return <FormItems items={formItems} />;
 };
 
-export default UsersSearchFormItems;
+export default UsersCreateOrUpdateFormItems;

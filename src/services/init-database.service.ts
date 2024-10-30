@@ -15,20 +15,8 @@ export class InitDatabase implements OnModuleInit {
   }
 
   private async initTables() {
-    const tablesNeedToInit = [this.initTodosTable(), this.initUsersTable()];
+    const tablesNeedToInit = [this.initUsersTable()];
     await Promise.all(tablesNeedToInit);
-  }
-
-  private async initTodosTable() {
-    const hasTable = await this.knex.schema.hasTable(DATABASES.TODOS);
-    if (!hasTable) {
-      await this.knex.schema.createTable(DATABASES.TODOS, (table) => {
-        table.increments('id').primary();
-        table.string('name').notNullable();
-        table.string('email').notNullable().unique();
-        table.timestamp('created_at').defaultTo(this.knex.fn.now());
-      });
-    }
   }
 
   private async initUsersTable() {

@@ -1,10 +1,10 @@
 import Table from 'src/views/components/table';
 import { USERS_TABLE_COLUMNS, USERS_TABLE_ID } from './constants';
-import { User } from 'src/schemas/users';
+import { SearchUsers } from 'src/schemas/users';
 import Pagination from 'src/views/components/pagination';
 
 type UsersTableProps = {
-  data: User[];
+  data: SearchUsers;
   page: number;
   total: number;
   email?: string;

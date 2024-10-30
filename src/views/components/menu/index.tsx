@@ -8,6 +8,7 @@ export type SubMenuItem = {
   icon?: ReactNode;
   className?: string;
   id?: string;
+  active?: boolean;
 };
 
 export type SubMenuItems = SubMenuItem[];

@@ -1,5 +1,16 @@
-const submitBtnId = 'users-search-form-btn';
+const createUserBtnId = 'users-create-btn';
+const createUserModalId = 'users-create-modal';
 
-document.getElementById(submitBtnId).addEventListener('click', function (e) {
-  console.log('e', e);
+document.getElementById(createUserBtnId).addEventListener('click', function () {
+  const createUserModal = document.getElementById(createUserModalId);
+  if (createUserModal) {
+    createUserModal.showModal();
+  }
+});
+
+document.addEventListener('closeUsersModal', function () {
+  const createUserModal = document.getElementById(createUserModalId);
+  if (createUserModal) {
+    createUserModal.close();
+  }
 });
