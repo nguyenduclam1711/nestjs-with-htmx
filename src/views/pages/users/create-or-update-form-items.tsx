@@ -1,7 +1,7 @@
 import FormItems, { FormItemsProps } from 'src/views/components/form-items';
 import Input, { InputProps } from 'src/views/components/input';
 
-type UsersCreateOrUpdateFormItemsProps = {
+export type UsersCreateOrUpdateFormItemsProps = {
   name?: string;
   email?: string;
   error?: {

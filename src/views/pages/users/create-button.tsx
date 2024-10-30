@@ -9,7 +9,7 @@ const UsersCreateButton = () => {
     <Button
       className="mt-9"
       id={USERS_CREATE_BUTTON_ID}
-      hx-get="/users/create-or-update-form-items"
+      hx-get="/users/create-form-items"
       hx-swap="innerHTML"
       hx-target={`#${USERS_CREATE_FORM_ITEMS_ID}`}
       variant="primary"

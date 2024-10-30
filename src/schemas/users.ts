@@ -17,5 +17,12 @@ export const CreateUserBodySchema = UserSchema.pick({
 
 export type CreateUserBody = z.infer<typeof CreateUserBodySchema>;
 
+export const UpdateUserBodySchema = UserSchema.pick({
+  name: true,
+  email: true,
+});
+
+export type UpdateUserBody = z.infer<typeof UpdateUserBodySchema>;
+
 export type SearchUserItem = User & Pick<UserCredential, 'user_id'>;
 export type SearchUsers = Array<SearchUserItem>;

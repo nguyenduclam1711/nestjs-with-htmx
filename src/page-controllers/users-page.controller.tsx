@@ -2,8 +2,12 @@ import {
   Body,
   Controller,
   Get,
+  Header,
   Inject,
+  Param,
+  ParseIntPipe,
   Post,
+  Put,
   Query,
   Request,
   Response,
@@ -14,15 +18,21 @@ import {
 import { PageExceptionFilter } from 'src/exception-filters/page-exception.filter';
 import { PagePushUrlWithParamsInterceptor } from 'src/interceptors/page-push-curr-url-with-params.interceptor';
 import { PageValidationPipe } from 'src/pipes/page-validation.pipe';
-import { CreateUserBody, CreateUserBodySchema } from 'src/schemas/users';
+import {
+  CreateUserBody,
+  CreateUserBodySchema,
+  UpdateUserBody,
+} from 'src/schemas/users';
 import { RenderingService } from 'src/services/rendering.service';
 import { UsersService } from 'src/services/users.service';
 import UsersPage from 'src/views/pages/users';
 import UsersCreateOrUpdateFormItems from 'src/views/pages/users/create-or-update-form-items';
-import UsersSearchFormItems from 'src/views/pages/users/search-form-items';
 import UsersTable from 'src/views/pages/users/table';
 import { Response as ExpressResponse } from 'express';
 import { USERS_SEARCH_EVENT } from 'src/views/pages/users/constants';
+import Alert from 'src/views/components/alert';
+import ModalContent from 'src/views/components/modal/modal-content';
+import UpdateModalContent from 'src/views/pages/users/update-modal-content';
 
 @Controller('/users')
 export class UsersPageController {
@@ -78,6 +88,7 @@ export class UsersPageController {
 
   @Get('/search')
   @UseInterceptors(PagePushUrlWithParamsInterceptor)
+  @Header('HX-Trigger-After-Settle', 'onSearchUsersSuccess')
   async searchUsers(
     @Query()
     query: {
@@ -107,9 +118,67 @@ export class UsersPageController {
     );
   }
 
-  @Get('/create-or-update-form-items')
-  getCreateOrUpdateFormItems() {
-    return this.renderingService.render(<UsersSearchFormItems />);
+  @Get('/create-form-items')
+  getCreateFormItems() {
+    return this.renderingService.render(<UsersCreateOrUpdateFormItems />);
+  }
+
+  @Get('/update-modal-content/:userId')
+  async getUpdateFormItems(
+    @Param('userId', ParseIntPipe)
+    userId: number,
+  ) {
+    const user = await this.usersService.findOne({
+      id: userId,
+    });
+    if (!user) {
+      return this.renderingService.render(
+        <ModalContent title="Not found user">
+          <Alert type="error">Not found user</Alert>
+        </ModalContent>,
+      );
+    }
+    return this.renderingService.render(
+      <UpdateModalContent
+        userId={userId}
+        formItemsProps={{
+          name: user.name,
+          email: user.email,
+        }}
+      />,
+    );
+  }
+
+  @Put('/update/:userId')
+  @UseFilters(
+    new PageExceptionFilter({
+      Component: UsersCreateOrUpdateFormItems,
+      getTemplateCtx: (req) => {
+        const body = req.body as UpdateUserBody;
+        return {
+          email: body.email,
+          name: body.name,
+        };
+      },
+    }),
+  )
+  @UsePipes(new PageValidationPipe(CreateUserBodySchema))
+  async updateUser(
+    @Param('userId', ParseIntPipe)
+    userId: number,
+    @Body()
+    body: UpdateUserBody,
+    @Response()
+    res: ExpressResponse,
+  ) {
+    const { name, email } = body;
+    await this.usersService.updateOne(userId, {
+      name,
+      email,
+    });
+    const hxTriggerEvents = `${USERS_SEARCH_EVENT}, closeUpdateUsersModal`;
+    res.setHeader('Hx-Trigger', hxTriggerEvents);
+    res.sendStatus(200);
   }
 
   @Post()
@@ -137,7 +206,7 @@ export class UsersPageController {
       name,
       email,
     });
-    const hxTriggerEvents = `${USERS_SEARCH_EVENT}, closeUsersModal`;
+    const hxTriggerEvents = `${USERS_SEARCH_EVENT}, closeCreateUsersModal`;
     res.setHeader('Hx-Trigger', hxTriggerEvents);
     res.sendStatus(200);
   }

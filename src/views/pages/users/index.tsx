@@ -7,6 +7,7 @@ import UsersTable from './table';
 import { FRONTEND_ROUTES } from 'src/constants/frontend-routes';
 import UsersCreateButton from './create-button';
 import UsersCreateModal from './create-modal';
+import UsersUpdateModal from './update-modal';
 
 type UsersPageProps = {
   currentUser: User;
@@ -45,6 +46,7 @@ const UsersPage = (props: UsersPageProps) => {
           email={searchFormData?.email}
         />
       </div>
+      <UsersUpdateModal />
     </AdminPageWrapper>
   );
 };
