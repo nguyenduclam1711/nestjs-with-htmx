@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Header,
   Inject,
@@ -33,6 +34,8 @@ import { USERS_SEARCH_EVENT } from 'src/views/pages/users/constants';
 import Alert from 'src/views/components/alert';
 import ModalContent from 'src/views/components/modal/modal-content';
 import UpdateModalContent from 'src/views/pages/users/update-modal-content';
+import DeleteModalErrorAlert from 'src/views/pages/users/delete-modal-error-alert';
+import { getUsersDeleteModalContentId } from 'src/views/pages/users/utils';
 
 @Controller('/users')
 export class UsersPageController {
@@ -207,6 +210,41 @@ export class UsersPageController {
       email,
     });
     const hxTriggerEvents = `${USERS_SEARCH_EVENT}, closeCreateUsersModal`;
+    res.setHeader('Hx-Trigger', hxTriggerEvents);
+    res.sendStatus(200);
+  }
+
+  @Delete('/delete/:userId')
+  @UseFilters(
+    new PageExceptionFilter({
+      Component: DeleteModalErrorAlert,
+      headers: (req) => {
+        const { params } = req;
+        const userId = params.userId;
+        return [
+          {
+            key: 'HX-Reswap',
+            value: 'innerHTML',
+          },
+          {
+            key: 'HX-Retarget',
+            value: `#${getUsersDeleteModalContentId(Number(userId))}`,
+          },
+        ];
+      },
+    }),
+  )
+  async deleteUser(
+    @Param('userId', ParseIntPipe)
+    userId: number,
+    @Request()
+    req: any,
+    @Response()
+    res: ExpressResponse,
+  ) {
+    const { user } = req;
+    await this.usersService.deleteOne(userId, user.id);
+    const hxTriggerEvents = `${USERS_SEARCH_EVENT}`;
     res.setHeader('Hx-Trigger', hxTriggerEvents);
     res.sendStatus(200);
   }
