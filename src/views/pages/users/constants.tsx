@@ -3,6 +3,8 @@ import { FormatUtils } from 'src/utils/formatUtils';
 import { PageWrapperProps } from 'src/views/commons/page-wrapper';
 import { TableProps } from 'src/views/components/table';
 import UsersUpdateButton from './update-button';
+import UsersDeleteButton from './delete-button';
+import UsersDeleteModal from './delete-modal';
 
 export const USERS_TABLE_COLUMNS: TableProps<SearchUserItem>['columns'] = [
   {
@@ -34,8 +36,18 @@ export const USERS_TABLE_COLUMNS: TableProps<SearchUserItem>['columns'] = [
   {
     title: 'Action',
     dataKey: ['id'],
-    render: (userId) => {
-      return <UsersUpdateButton userId={userId as string} />;
+    render: (userId, user) => {
+      return (
+        <div className="flex gap-2">
+          <UsersUpdateButton userId={userId as string} />
+          <UsersDeleteButton userId={user.id} />
+          <UsersDeleteModal
+            name={user.name}
+            userId={user.id}
+            email={user.email}
+          />
+        </div>
+      );
     },
   },
 ];
@@ -62,3 +74,5 @@ export const USERS_UPDATE_MODAL_ID = 'users-update-modal';
 export const USERS_UPDATE_BUTTON_ID = 'users-update-btn';
 export const USERS_UPDATE_MODAL_CONTENT_ID = 'users-update-modal-content';
 export const USERS_UPDATE_FORM_ITEMS_ID = 'users-update-form-items';
+
+export const USERS_DELETE_BUTTON_ID = 'users-delete-btn';

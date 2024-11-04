@@ -12,13 +12,17 @@ import { renderToString } from 'react-dom/server';
 @Catch(HttpException)
 export class PageExceptionFilter implements ExceptionFilter {
   private getTemplateCtx?: (req: Request) => Record<string, any>;
-  private headers?: Array<{ key: string; value: any }>;
+  private headers?:
+    | Array<{ key: string; value: any }>
+    | ((req: Request) => Array<{ key: string; value: any }>);
   private Component: FC<any>;
 
   constructor(params: {
-    Component: FC;
+    Component: FC<any>;
     getTemplateCtx?: (req: Request) => Record<string, any>;
-    headers?: Array<{ key: string; value: any }>;
+    headers?:
+      | Array<{ key: string; value: any }>
+      | ((req: Request) => Array<{ key: string; value: any }>);
   }) {
     const { getTemplateCtx, headers, Component } = params;
     this.Component = Component;
@@ -39,8 +43,15 @@ export class PageExceptionFilter implements ExceptionFilter {
     if (typeof this.getTemplateCtx === 'function') {
       templateCtx = this.getTemplateCtx(req);
     }
-    if (Array.isArray(this.headers) && this.headers.length > 0) {
-      this.headers.forEach((header) => {
+    let headersArr: Array<{ key: string; value: any }> = [];
+    if (typeof this.headers === 'function') {
+      headersArr = this.headers(req);
+    }
+    if (Array.isArray(this.headers)) {
+      headersArr = this.headers;
+    }
+    if (headersArr.length > 0) {
+      headersArr.forEach((header) => {
         res.setHeader(header.key, header.value);
       });
     }

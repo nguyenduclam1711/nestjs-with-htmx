@@ -2,6 +2,7 @@ import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { Knex } from 'knex';
 import { DATABASES } from 'src/constants/databases';
 import { MODULES } from 'src/constants/modules';
+import { USER_STATUSES, UserStatus } from 'src/schemas/users';
 
 @Injectable()
 export class InitDatabase implements OnModuleInit {
@@ -27,6 +28,13 @@ export class InitDatabase implements OnModuleInit {
         table.string('name').notNullable();
         table.string('email').notNullable().unique();
         table.timestamp('created_at').defaultTo(this.knex.fn.now());
+        table
+          .enu('status', USER_STATUSES, {
+            useNative: true,
+            enumName: 'user_status',
+          })
+          .notNullable()
+          .defaultTo(UserStatus.active);
       });
     }
     // because users table must exists before create user credentials

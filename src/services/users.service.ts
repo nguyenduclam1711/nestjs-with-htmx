@@ -8,7 +8,12 @@ import { Knex } from 'knex';
 import { DATABASES } from 'src/constants/databases';
 import { MODULES } from 'src/constants/modules';
 import { DEFAULT_PAGINATION_SIZE } from 'src/constants/pagination';
-import { SearchUsers, UpdateUserBody, User } from 'src/schemas/users';
+import {
+  SearchUsers,
+  UpdateUserBody,
+  User,
+  UserStatus,
+} from 'src/schemas/users';
 import { ErrorUtils } from 'src/utils/errorUtils';
 
 @Injectable()
@@ -28,6 +33,7 @@ export class UsersService {
         .insert({
           name,
           email,
+          status: UserStatus.active,
         })
         .returning(['*']);
       return query[0];
@@ -50,7 +56,12 @@ export class UsersService {
   }
 
   async findOne(user: Partial<User>): Promise<User | undefined> {
-    const usersQuery = await this.knex(DATABASES.USERS).select('*').where(user);
+    const usersQuery = await this.knex(DATABASES.USERS)
+      .select('*')
+      .where({
+        ...user,
+        status: UserStatus.active,
+      });
     return usersQuery[0];
   }
 
@@ -65,6 +76,7 @@ export class UsersService {
     const { email, name } = user ?? {};
     const { page = 1, size = DEFAULT_PAGINATION_SIZE } = pagination ?? {};
     const whereBuilderFn = (builder) => {
+      builder.where('status', UserStatus.active);
       if (email) {
         builder.whereILike('email', `%${email}%`);
       }
@@ -100,10 +112,12 @@ export class UsersService {
 
   async updateOne(id: number, payload: UpdateUserBody) {
     try {
-      await this.knex(DATABASES.USERS).where({ id }).update({
-        name: payload.name,
-        email: payload.email,
-      });
+      await this.knex(DATABASES.USERS)
+        .where({ id, status: UserStatus.active })
+        .update({
+          name: payload.name,
+          email: payload.email,
+        });
     } catch (error: any) {
       if (error.code === '23505') {
         ErrorUtils.throwPageException({
@@ -112,6 +126,35 @@ export class UsersService {
           pageFormError: {
             email: 'Email has already existed',
           },
+        });
+      } else {
+        ErrorUtils.throwPageException({
+          Exception: UnprocessableEntityException,
+          message: error.detail,
+        });
+      }
+    }
+  }
+
+  async deleteOne(id: number, currentUserId: number) {
+    if (id === currentUserId) {
+      ErrorUtils.throwPageException({
+        Exception: UnprocessableEntityException,
+        message: 'Cannot delete the current logged in user',
+      });
+      return;
+    }
+    try {
+      await this.knex(DATABASES.USERS)
+        .where({ id, status: UserStatus.active })
+        .update({
+          status: UserStatus.inactive,
+        });
+    } catch (error: any) {
+      if (error.code === '23503') {
+        ErrorUtils.throwPageException({
+          Exception: ConflictException,
+          message: error.detail,
         });
       } else {
         ErrorUtils.throwPageException({

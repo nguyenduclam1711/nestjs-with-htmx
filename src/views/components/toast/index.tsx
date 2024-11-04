@@ -1,4 +1,8 @@
 import Alert, { AlertProps } from '../alert';
+import {
+  MAP_TOAST_ALIGN_TO_CLASSNAMES,
+  MAP_TOAST_POSITION_TO_CLASSNAMES,
+} from './constants';
 
 export type ToastProps = {
   // horizontal align
@@ -12,7 +16,7 @@ export type ToastProps = {
 const Toast = (props: ToastProps) => {
   const { align = 'end', position = 'top', id, className, alertProps } = props;
   const getClassName = () => {
-    let result = `toast toast-${align} toast-${position}`;
+    let result = `toast ${MAP_TOAST_ALIGN_TO_CLASSNAMES[align]} ${MAP_TOAST_POSITION_TO_CLASSNAMES[position]}`;
     if (className) {
       result += ` ${className}`;
     }
