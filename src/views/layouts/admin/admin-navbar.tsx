@@ -27,7 +27,16 @@ const AdminLayoutNavbar = (props: AdminLayoutNavbarProps) => {
       className="bg-white"
       startContent={<h1 className="text-xl pl-4">{pageTitle}</h1>}
       endContent={
-        <Dropdown align="end" content={<AdminAvatarDropdownContent />}>
+        <Dropdown
+          align="end"
+          content={
+            <AdminAvatarDropdownContent
+              avatarPlaceholder={getAvatarPlaceholder()}
+              userName={user.name}
+            />
+          }
+          contentClassName="w-40"
+        >
           <Avatar placeholder={getAvatarPlaceholder()} />
         </Dropdown>
       }
